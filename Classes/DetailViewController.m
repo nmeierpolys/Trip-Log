@@ -24,6 +24,7 @@
 @synthesize selectedLocationIndex;
 @synthesize lastUpdate;
 @synthesize idleTime;
+@synthesize addresses;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -60,6 +61,8 @@
     [self loadAnnotationsToMap];
     
     [self loadDefaults];
+    
+    addresses = [[NSMutableArray alloc] init];
     
     zoomLevel = 1;
 }
@@ -154,7 +157,7 @@
     NSDate *currentTime = [NSDate date];
     NSTimeInterval interval = [currentTime timeIntervalSinceDate:self.idleTime];
     
-    if(isInBackground && (interval > maxIdleTime))
+    if(isInBackground && (!allowBackgroundUpdates || (interval > maxIdleTime)))
         [self stopMonitoringLocation];
     
     
@@ -229,6 +232,7 @@
 - (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFindPlacemark:(MKPlacemark *)placemark {
     //NSString *subtitle = [NSString stringWithFormat:@"%@",tempAnnotation.coordName];
     NSString *subtitle = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
+    
     [tempAnnotation setSubtitle:subtitle];
     [selectedTrip addLocation:tempAnnotation];
     [_mapView addAnnotation:tempAnnotation];
@@ -359,7 +363,25 @@
     MKCoordinateSpan span;
     span.latitudeDelta = zoomLevelLocal;
     span.longitudeDelta = zoomLevelLocal;
-    CLLocationCoordinate2D location = _mapView.userLocation.coordinate;
+    
+    
+    NSLog(@"%f,%f",_mapView.userLocation.coordinate.latitude,
+          _mapView.userLocation.coordinate.longitude);
+    
+    CLLocationCoordinate2D location = CLLocationCoordinate2DMake(0,0);
+    //CLLocationCoordinate2D location = _mapView.userLocation.coordinate;
+    
+    NSLog(@"%f,%f",location.latitude, location.longitude);
+    //If the user location is unknown (0,0), center the map on the last point
+    //in the selected trip's array.
+    if((location.latitude == 0) && (location.longitude == 0) && (selectedTrip.locations.count > 0))
+    {
+        MyLocation *lastLocation = selectedTrip.locations.lastObject;
+        if(lastLocation != nil)
+            location = lastLocation.coordinate;
+    }
+    
+    NSLog(@"%f,%f",location.latitude, location.longitude);
     
     region.span = span;
     region.center = location;

@@ -408,14 +408,50 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"MyIdentifier"] autorelease];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     // Set up the cell...
-	NSString *cellValue = [listOfItems objectAtIndex:indexPath.row];
-	cell.textLabel.text = cellValue;
-
+    Trip *tripForCell = [trips objectAtIndex:indexPath.row];
+    
+    NSString *tripTitle = tripForCell.tripName;
+    NSString *tripSubtitle = [[NSString alloc] init];
+    
+    
+    //Get and format date
+    MyLocation *lastPoint = (MyLocation *)tripForCell.locations.lastObject;
+    if(lastPoint != nil)
+    {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+        
+        NSString *tripDate = [dateFormatter stringFromDate:lastPoint.foundDate]; 
+        [dateFormatter release];
+    
+        tripSubtitle = tripDate;
+    }
+    
+    
+    //Add trip count string
+    int numLocations = tripForCell.locations.count;
+    if(numLocations > 0)
+    {
+        if(tripSubtitle.length > 0)
+            tripSubtitle = [NSString stringWithFormat:@"%@      ",tripSubtitle];
+        
+        tripSubtitle = [NSString stringWithFormat:@"%@ %i point(s)",tripSubtitle,numLocations];
+    }
+    
+    NSString* imageName = [[NSBundle mainBundle] pathForResource:@"linen_bg_tile" ofType:@"jpg"];
+    
+	cell.textLabel.text = tripTitle;
+    cell.detailTextLabel.text = tripSubtitle;
+    UIImage * backgroundImage = [[UIImage alloc] initWithContentsOfFile:imageName];
+    cell.imageView.image = backgroundImage;
+    
     return cell;
 }
 

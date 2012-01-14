@@ -59,6 +59,8 @@
 @property CLLocationDegrees previousLat;
 @property CLLocationDegrees previousLong;
 @property int selectedLocationIndex;
+@property (nonatomic, retain)
+    NSMutableArray *addresses;
 - (void)zoomView:(double) zoomLevelLocal;
 - (void)loadAnnotationsToMap;
 - (void)saveInfo;
