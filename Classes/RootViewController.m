@@ -238,16 +238,6 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     [self saveTripListToPlist];
     
     if(index >= trips.count){
-        //TSAlertView* av = [[[TSAlertView alloc] init] autorelease];
-        //av.title = @"Problem";
-        //av.message = [NSString stringWithFormat:@"Trip %i/%i exists in table with no plist: %@",index,trips.count,[[trips objectAtIndex:index] filename]];
-        
-        //[av addButtonWithTitle: @"Ok"];
-        
-        //av.style = TSAlertViewStyleNormal;
-        //av.buttonLayout = TSAlertViewButtonLayoutNormal;
-        
-        //[av show];
         return;
     }
     
@@ -355,28 +345,15 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     [trips replaceObjectAtIndex:index withObject:selectedTrip];
 }
 
-/*
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.tableView reloadData];
 }
-*/
-/*
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-}
-*/
-/*
+
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 }
-*/
-
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-	[super viewDidDisappear:animated]
-}
-*/
-
 
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -420,18 +397,20 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     NSString *tripTitle = tripForCell.tripName;
     NSString *tripSubtitle = [[NSString alloc] init];
     
-    
     //Get and format date
-    MyLocation *lastPoint = (MyLocation *)tripForCell.locations.lastObject;
-    if(lastPoint != nil)
+    if(false)
     {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"MM/dd/yyyy"];
-        
-        NSString *tripDate = [dateFormatter stringFromDate:lastPoint.foundDate]; 
-        [dateFormatter release];
-    
-        tripSubtitle = tripDate;
+        MyLocation *lastPoint = (MyLocation *)tripForCell.locations.lastObject;
+        if((lastPoint != nil) && (lastPoint.foundDate != nil))
+        {
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+            
+            id tripDate = [dateFormatter stringFromDate:lastPoint.foundDate]; 
+            [dateFormatter release];
+            
+            tripSubtitle = tripDate;
+        }
     }
     
     

@@ -25,6 +25,7 @@
     }
     return self;
 }
+
 - (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate time:(NSString*)timeIn {
     if ((self = [super init])) {
         _name = [name copy];

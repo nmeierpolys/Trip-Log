@@ -27,6 +27,7 @@
 - (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate;
 
 - (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate time:(NSString*)time;
+
 - (id)initWithDictionary:(NSDictionary *)dictionary;
 - (NSDictionary *)convertToDictionary;
 

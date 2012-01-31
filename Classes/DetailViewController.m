@@ -191,6 +191,29 @@
 - (void)locationError:(NSError *)error {
 }
 
+- (double)distanceBetweenPoints:(MyLocation *)fromPoint toPoint:(MyLocation *)toPoint unitEnum:(int)unitEnum{
+    
+    if((fromPoint == nil) || (toPoint == nil))
+        return 0;
+
+    //Convert to CLLocations
+    CLLocation *fromLocation = [[CLLocation alloc] initWithCoordinate: fromPoint.coordinate altitude:1 horizontalAccuracy:1 verticalAccuracy:-1 timestamp:nil];
+    CLLocation *toLocation = [[CLLocation alloc] initWithCoordinate: toPoint.coordinate altitude:1 horizontalAccuracy:1 verticalAccuracy:-1 timestamp:nil];
+    
+    //Calculate distance in meters
+    CLLocationDistance baseDistance = [fromLocation distanceFromLocation:toLocation];
+    
+    double distance;
+    if(unitEnum == 1)  //meters
+        distance = baseDistance;
+    else if(unitEnum == 2)  //miles
+        distance = baseDistance * 0.000621371192;
+    else if(unitEnum == 3)  //feet
+        distance = baseDistance * 3.280840;
+    
+    return distance;
+}
+
 - (void)plotData:(CLLocationCoordinate2D)coordinate {
     MyLocation *lastPoint = selectedTrip.locations.lastObject;
     CLLocation *newLocation = [[CLLocation alloc] initWithCoordinate: coordinate altitude:1 horizontalAccuracy:1 verticalAccuracy:-1 timestamp:nil];
@@ -308,7 +331,12 @@
 
 - (NSString *)tripSummary:(Trip *)trip{ 
     NSString *output = [[NSString alloc] init];
-    
+    NSString *distances = [NSString stringWithFormat:@"Cumulative Distance: %@\n",
+                           [trip cumulativeDistanceAutoformatted]];
+    distances = [distances stringByAppendingFormat:@"Direct Distance: %@\n",
+                           [trip directDistanceAutoformatted]];
+                 
+    output = distances;
     int count = trip.locations.count;
     for(int i=0;i<count;i++){
         MyLocation *location = [trip.locations objectAtIndex:i];
