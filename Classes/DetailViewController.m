@@ -464,8 +464,15 @@
         [UIView setAnimationDuration:0.2];
         [UIView setAnimationCurve:UIViewAnimationCurveLinear];
         
-        summaryView.transform = CGAffineTransformMakeTranslation (0, -106);
-        _mapView.transform = CGAffineTransformMakeTranslation(0,-50);
+        if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            summaryView.transform = CGAffineTransformMakeTranslation (0, -375);
+            _mapView.transform = CGAffineTransformMakeTranslation(0,-225);
+        } else {
+            
+            summaryView.transform = CGAffineTransformMakeTranslation (0, -106);
+            _mapView.transform = CGAffineTransformMakeTranslation(0,-50);
+        }
         
         [UIView commitAnimations];
         
@@ -475,8 +482,8 @@
         [UIView setAnimationDuration:0.2];
         [UIView setAnimationCurve:UIViewAnimationCurveLinear];
         
-        summaryView.transform = CGAffineTransformMakeTranslation (0, 106);
-        _mapView.transform = CGAffineTransformMakeTranslation(0, 50);
+        summaryView.transform = CGAffineTransformMakeTranslation (0, 0);
+        _mapView.transform = CGAffineTransformMakeTranslation(0, 0);
         
         summaryView.alpha = 0;
         

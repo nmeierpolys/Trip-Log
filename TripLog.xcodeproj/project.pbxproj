@@ -47,6 +47,9 @@
 		B4E4E133145A6ADF00ED4D33 /* Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = B4E4E130145A6ADF00ED4D33 /* Trip.m */; };
 		B4E4E135145A739600ED4D33 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4E4E134145A739600ED4D33 /* CoreLocation.framework */; };
 		B4E4E13B145A87D000ED4D33 /* CoreLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4E4E13A145A87D000ED4D33 /* CoreLocationController.m */; };
+		F185151B14D79C5800F01EAE /* RootViewControllerIPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F185151A14D79C5800F01EAE /* RootViewControllerIPad.xib */; };
+		F185151E14D79C7C00F01EAE /* DetailViewIPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F185151D14D79C7C00F01EAE /* DetailViewIPad.xib */; };
+		F185152414D79FB500F01EAE /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F185152314D79FB500F01EAE /* MainWindow-iPad.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -103,6 +106,9 @@
 		B4E4E134145A739600ED4D33 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B4E4E139145A87D000ED4D33 /* CoreLocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreLocationController.h; sourceTree = "<group>"; };
 		B4E4E13A145A87D000ED4D33 /* CoreLocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreLocationController.m; sourceTree = "<group>"; };
+		F185151A14D79C5800F01EAE /* RootViewControllerIPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RootViewControllerIPad.xib; sourceTree = "<group>"; };
+		F185151D14D79C7C00F01EAE /* DetailViewIPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailViewIPad.xib; sourceTree = "<group>"; };
+		F185152314D79FB500F01EAE /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +175,7 @@
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
+				F185152214D79FB400F01EAE /* iPad */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
@@ -201,8 +208,10 @@
 				2899E55F0DE3E45000AC0155 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				B42D39ED14673BD300EA1754 /* DetailView.xib */,
+				F185151D14D79C7C00F01EAE /* DetailViewIPad.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				B46C06B514763A1700BC9C5F /* SplashScreen.xib */,
+				F185151A14D79C5800F01EAE /* RootViewControllerIPad.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -230,6 +239,14 @@
 				B40A9E941464D1B500B332CE /* TSAlertViewMessageListViewShadow.png */,
 			);
 			name = TSAlertView;
+			sourceTree = "<group>";
+		};
+		F185152214D79FB400F01EAE /* iPad */ = {
+			isa = PBXGroup;
+			children = (
+				F185152314D79FB500F01EAE /* MainWindow-iPad.xib */,
+			);
+			name = iPad;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -307,6 +324,9 @@
 				B45870B31478AA9800F0F8D5 /* Pinned Trail - Large.png in Resources */,
 				B45870B51478AAC500F0F8D5 /* Default@2x.png in Resources */,
 				B45C851D147CD33E001D0ADF /* Entitlements.plist in Resources */,
+				F185151B14D79C5800F01EAE /* RootViewControllerIPad.xib in Resources */,
+				F185151E14D79C7C00F01EAE /* DetailViewIPad.xib in Resources */,
+				F185152414D79FB500F01EAE /* MainWindow-iPad.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,9 +364,11 @@
 				GCC_PREFIX_HEADER = TripLog_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = TripLog;
 				SDKROOT = iphoneos5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -359,9 +381,11 @@
 				GCC_PREFIX_HEADER = TripLog_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = TripLog;
 				SDKROOT = iphoneos5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -392,9 +416,11 @@
 				GCC_PREFIX_HEADER = TripLog_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = TripLog;
 				SDKROOT = iphoneos5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Distribution;
 		};

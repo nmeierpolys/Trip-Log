@@ -440,7 +440,16 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 	//[self saveTripToPlist:indexPath.row];
 	
 	//Initialize the detail view controller and display it.
-	DetailViewController *dvController = [[DetailViewController alloc] initWithNibName:@"DetailView" bundle:[NSBundle mainBundle]];
+    DetailViewController *dvController;
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        dvController = [[DetailViewController alloc] initWithNibName:@"DetailViewIPad" bundle:[NSBundle mainBundle]];
+    }
+    else
+    {
+        dvController = [[DetailViewController alloc] initWithNibName:@"DetailView" bundle:[NSBundle mainBundle]];
+    }
+    
     
     if(indexPath.row >= trips.count){
         TSAlertView* av = [[[TSAlertView alloc] init] autorelease];
