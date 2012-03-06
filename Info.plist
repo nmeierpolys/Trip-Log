@@ -14,6 +14,7 @@
 	<array>
 		<string>earth2-withpins.png</string>
 		<string>earth2-withpins-small.png</string>
+		<string>earth2-withpins72x72.png</string>
 	</array>
 	<key>CFBundleIcons</key>
 	<dict>
@@ -23,13 +24,14 @@
 			<array>
 				<string>earth2-withpins.png</string>
 				<string>earth2-withpins-small.png</string>
+				<string>earth2-withpins72x72.png</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<false/>
 		</dict>
 	</dict>
 	<key>CFBundleIdentifier</key>
-	<string>com.thanscorner.triplog</string>
+	<string></string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -37,17 +39,17 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSMainNibFile</key>
 	<string>MainWindow</string>
 	<key>NSMainNibFile~ipad</key>
-	<string>MainWindow-iPad</string>
+	<string>MainWindowIPad</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
@@ -55,9 +57,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 </dict>
 </plist>

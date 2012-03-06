@@ -47,9 +47,12 @@
 		B4E4E133145A6ADF00ED4D33 /* Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = B4E4E130145A6ADF00ED4D33 /* Trip.m */; };
 		B4E4E135145A739600ED4D33 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4E4E134145A739600ED4D33 /* CoreLocation.framework */; };
 		B4E4E13B145A87D000ED4D33 /* CoreLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4E4E13A145A87D000ED4D33 /* CoreLocationController.m */; };
+		F1385CF814F027FC00596B26 /* MainWindowIPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1385CF714F027FC00596B26 /* MainWindowIPad.xib */; };
+		F1385CF914F029AD00596B26 /* earth2-withpins72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = F185152714D8DD9800F01EAE /* earth2-withpins72x72.png */; };
 		F185151B14D79C5800F01EAE /* RootViewControllerIPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F185151A14D79C5800F01EAE /* RootViewControllerIPad.xib */; };
 		F185151E14D79C7C00F01EAE /* DetailViewIPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F185151D14D79C7C00F01EAE /* DetailViewIPad.xib */; };
 		F185152414D79FB500F01EAE /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F185152314D79FB500F01EAE /* MainWindow-iPad.xib */; };
+		F185152614D8DBC100F01EAE /* imgres.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = F185152514D8DBC100F01EAE /* imgres.jpeg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -106,9 +109,13 @@
 		B4E4E134145A739600ED4D33 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B4E4E139145A87D000ED4D33 /* CoreLocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreLocationController.h; sourceTree = "<group>"; };
 		B4E4E13A145A87D000ED4D33 /* CoreLocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreLocationController.m; sourceTree = "<group>"; };
+		F1385CF714F027FC00596B26 /* MainWindowIPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindowIPad.xib; sourceTree = "<group>"; };
 		F185151A14D79C5800F01EAE /* RootViewControllerIPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RootViewControllerIPad.xib; sourceTree = "<group>"; };
 		F185151D14D79C7C00F01EAE /* DetailViewIPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DetailViewIPad.xib; sourceTree = "<group>"; };
 		F185152314D79FB500F01EAE /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		F185152514D8DBC100F01EAE /* imgres.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = imgres.jpeg; sourceTree = "<group>"; };
+		F185152714D8DD9800F01EAE /* earth2-withpins72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "earth2-withpins72x72.png"; sourceTree = "<group>"; };
+		F185152914D8DDBB00F01EAE /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +171,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				F185152914D8DDBB00F01EAE /* Default-Landscape~ipad.png */,
 				B45C851C147CD33E001D0ADF /* Entitlements.plist */,
 				B46C06AB147622E700BC9C5F /* Settings.bundle */,
 				B42D3A1A14703EB200EA1754 /* QuartzCore.framework */,
@@ -196,22 +204,26 @@
 			children = (
 				B47745D41474D6F100B9513F /* linen_bg_tile.jpg */,
 				B45870B41478AAC500F0F8D5 /* Default@2x.png */,
-				B45870B01478AA7E00F0F8D5 /* earth2-withpins-small.png */,
 				B45870AB1478A90400F0F8D5 /* Default.png */,
+				F185152514D8DBC100F01EAE /* imgres.jpeg */,
 				B45870A31478A81500F0F8D5 /* earth2-withpins.png */,
+				B45870B01478AA7E00F0F8D5 /* earth2-withpins-small.png */,
+				F185152714D8DD9800F01EAE /* earth2-withpins72x72.png */,
 				B45870B21478AA9800F0F8D5 /* Pinned Trail - Large.png */,
 				B45870AD1478A98E00F0F8D5 /* Pinned Trail - Small.png */,
 				B42D3A041467523F00EA1754 /* earth2.png */,
 				B42D3A011467512B00EA1754 /* images.png */,
 				B40A9E8A1463B29200B332CE /* logs.png */,
 				B40A9E871463B21D00B332CE /* log.png */,
-				2899E55F0DE3E45000AC0155 /* RootViewController.xib */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
+				2899E55F0DE3E45000AC0155 /* RootViewController.xib */,
+				F1385CF714F027FC00596B26 /* MainWindowIPad.xib */,
 				B42D39ED14673BD300EA1754 /* DetailView.xib */,
 				F185151D14D79C7C00F01EAE /* DetailViewIPad.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				B46C06B514763A1700BC9C5F /* SplashScreen.xib */,
 				F185151A14D79C5800F01EAE /* RootViewControllerIPad.xib */,
+				F185152314D79FB500F01EAE /* MainWindow-iPad.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -244,7 +256,6 @@
 		F185152214D79FB400F01EAE /* iPad */ = {
 			isa = PBXGroup;
 			children = (
-				F185152314D79FB500F01EAE /* MainWindow-iPad.xib */,
 			);
 			name = iPad;
 			sourceTree = "<group>";
@@ -327,6 +338,9 @@
 				F185151B14D79C5800F01EAE /* RootViewControllerIPad.xib in Resources */,
 				F185151E14D79C7C00F01EAE /* DetailViewIPad.xib in Resources */,
 				F185152414D79FB500F01EAE /* MainWindow-iPad.xib in Resources */,
+				F185152614D8DBC100F01EAE /* imgres.jpeg in Resources */,
+				F1385CF814F027FC00596B26 /* MainWindowIPad.xib in Resources */,
+				F1385CF914F029AD00596B26 /* earth2-withpins72x72.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,15 +408,17 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Nathaniel Meierpolys (TKN239JDGX)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Nathaniel Meierpolys (TKN239JDGX)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Nathaniel Meierpolys";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PREBINDING = NO;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ED3666A8-FD57-403C-BEBF-56C62531E055";
+				PROVISIONING_PROFILE = "A483A80D-F8F9-4475-ABBD-79658E086892";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F84BBB12-BB36-4BF5-9955-4EF1E129C58A";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Distribution;
 		};
@@ -428,7 +444,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Nathaniel Meierpolys (TKN239JDGX)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Nathaniel Meierpolys (TKN239JDGX)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -436,8 +452,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ED3666A8-FD57-403C-BEBF-56C62531E055";
+				PROVISIONING_PROFILE = "A483A80D-F8F9-4475-ABBD-79658E086892";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A483A80D-F8F9-4475-ABBD-79658E086892";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -445,15 +463,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Nathaniel Meierpolys (TKN239JDGX)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Nathaniel Meierpolys (TKN239JDGX)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Nathaniel Meierpolys";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PREBINDING = NO;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "ED3666A8-FD57-403C-BEBF-56C62531E055";
+				PROVISIONING_PROFILE = "A483A80D-F8F9-4475-ABBD-79658E086892";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F84BBB12-BB36-4BF5-9955-4EF1E129C58A";
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

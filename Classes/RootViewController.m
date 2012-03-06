@@ -424,7 +424,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         tripSubtitle = [NSString stringWithFormat:@"%@ %i point(s)",tripSubtitle,numLocations];
     }
     
-    NSString* imageName = [[NSBundle mainBundle] pathForResource:@"linen_bg_tile" ofType:@"jpg"];
+    NSString* imageName = [[NSBundle mainBundle] pathForResource:@"imgres" ofType:@"jpeg"];
     
 	cell.textLabel.text = tripTitle;
     cell.detailTextLabel.text = tripSubtitle;

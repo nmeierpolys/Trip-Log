@@ -124,8 +124,6 @@
     
     directDistance = [self distanceBetweenPoints:firstLocation toPoint:newLocation unitEnum:unit];
     cumulativeDistance += [self distanceBetweenPoints:lastLocation toPoint:newLocation unitEnum:unit];
-    
-    NSLog(@"cumulative: %f ||  direct: %f",cumulativeDistance,directDistance);
 }
 
 - (void)computeDistancesOfLocations{
@@ -152,8 +150,6 @@
     }
     
     directDistance = [self distanceBetweenPoints:firstLocation toPoint:currentLocation unitEnum:unit];
-    
-    NSLog(@"cumulative: %f ||  direct: %f",cumulativeDistance,directDistance);
 }
 
 - (double)distanceBetweenPoints:(MyLocation *)fromPoint toPoint:(MyLocation *)toPoint unitEnum:(int)unitEnum{
@@ -180,7 +176,6 @@
     
     NSString *toCoord = [NSString stringWithFormat:@"(%f,%f)",toLocation.coordinate.latitude,toLocation.coordinate.longitude];
     
-    NSLog(@"%@ -> %@  ||  d = %f",fromCoord,toCoord,distance);
     return distance;
 }
 
