@@ -25,6 +25,16 @@
 @synthesize lastUpdate;
 @synthesize idleTime;
 @synthesize addresses;
+@synthesize appSettingsViewController;
+
+- (IASKAppSettingsViewController*)appSettingsViewController {
+	if (!appSettingsViewController) {
+		appSettingsViewController = [[IASKAppSettingsViewController alloc] initWithNibName:@"IASKAppSettingsView" bundle:nil];
+		appSettingsViewController.delegate = self;
+        appSettingsViewController.showCreditsFooter = false;
+	}
+	return appSettingsViewController;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -32,9 +42,14 @@
 	//Set the title of the navigation bar
 	self.navigationItem.title = selectedTrip.tripName;
     
-    UIBarButtonItem *tempButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(openMail)];
+    UIBarButtonItem *btnMail = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(openMail)];
     
-    self.navigationItem.rightBarButtonItem = tempButton;
+    NSString* gearImageName = [[NSBundle mainBundle] pathForResource:@"gears" ofType:@"png"];
+    UIImage * gearImage = [[UIImage alloc] initWithContentsOfFile:gearImageName];
+    
+    UIBarButtonItem *btnConfig = [[UIBarButtonItem alloc] initWithImage:gearImage style:UIBarButtonItemStyleBordered target:self action:@selector(openConfig)];
+    
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:btnMail,btnConfig, nil];
     
     //Set up delegate for getting map updates
     CLController = [[CoreLocationController alloc] init];
@@ -67,6 +82,7 @@
     zoomLevel = 1;
 }
 - (void) loadDefaults {
+    [NSUserDefaults resetStandardUserDefaults];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     allowBackgroundUpdates = [defaults boolForKey:@"allowBackgroundUpdates"];
@@ -483,6 +499,11 @@
     }
 }
 
+- (void)openConfig
+{
+	self.appSettingsViewController.showDoneButton = NO;
+	[self.navigationController pushViewController:self.appSettingsViewController animated:YES];
+}
 
 - (void)openMail
 {

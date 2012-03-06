@@ -8,6 +8,7 @@
 #import "Trip.h"
 #import "RootViewController.h"
 #import "CoreLocationController.h"
+#import "IASKAppSettingsViewController.h"
 
 
 @interface DetailViewController : UIViewController <CoreLocationControllerDelegate, MKMapViewDelegate> {
@@ -43,7 +44,12 @@
     NSString *defaultEmail;
     double maxIdleTime;
     double updateInterval;
+    
+    //InAppSettings view
+    IASKAppSettingsViewController *appSettingsViewController;
 }
+
+
 - (IBAction)btnMapType:(id)sender;
 
 - (IBAction)btnZoom:(id)sender;
@@ -61,6 +67,7 @@
 @property int selectedLocationIndex;
 @property (nonatomic, retain)
     NSMutableArray *addresses;
+@property (nonatomic, retain) IASKAppSettingsViewController *appSettingsViewController;
 - (void)zoomView:(double) zoomLevelLocal;
 - (void)loadAnnotationsToMap;
 - (void)saveInfo;

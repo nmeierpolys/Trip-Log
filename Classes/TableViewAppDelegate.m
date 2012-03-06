@@ -59,7 +59,7 @@
     }
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application {
+- (void)applicationWillTermzinate:(UIApplication *)application {
 	// Save data if appropriate
     
     id testView = navigationController.viewControllers.lastObject;
@@ -70,12 +70,9 @@
     }
 }
 
-
-
 - (void)dealloc {
 	[navigationController release];
 	[window release];
 	[super dealloc];
 }
-
 @end
