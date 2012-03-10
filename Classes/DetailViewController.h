@@ -5,13 +5,16 @@
 
 #import <UIKit/UIKit.h>
 #import <MapKit/MapKit.h>
+#import <AddressBook/AddressBook.h>
 #import "Trip.h"
 #import "RootViewController.h"
 #import "CoreLocationController.h"
 #import "IASKAppSettingsViewController.h"
 
 
-@interface DetailViewController : UIViewController <CoreLocationControllerDelegate, MKMapViewDelegate> {
+@interface DetailViewController : UIViewController <CoreLocationControllerDelegate, 
+                                                    MKMapViewDelegate, 
+                                                    MFMailComposeViewControllerDelegate> {
 	CoreLocationController *CLController;
     CLGeocoder *reverseGeo;
     

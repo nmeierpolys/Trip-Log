@@ -43,16 +43,16 @@
     
 }
 
-- (double)directDistance{
+//- (double)directDistance{
     //Return the base distance in defined units
     //TODO: Add more support for units
     //TODO: add getter which returns a string that contains the right units - actually, need a utility library and funtion to handle this.  Also need some global-level consts to handle the units -- OR change unit display based on magnitude - 1000 feet -> miles
-    return directDistance;
-}
+    //return directDistance;
+//}
 
-- (double)cumulativeDistance{
-    return cumulativeDistance;
-}
+//- (double)cumulativeDistance{
+//    return cumulativeDistance;
+//}
 
 - (NSString *)cumulativeDistanceWithUnit:(int)unitEnum
 {
@@ -172,9 +172,9 @@
     else if(unitEnum == 3)  //feet
         distance = baseDistance * 3.280840;
     
-    NSString *fromCoord = [NSString stringWithFormat:@"(%f,%f)",fromLocation.coordinate.latitude,fromLocation.coordinate.longitude];
+    //NSString *fromCoord = [NSString stringWithFormat:@"(%f,%f)",fromLocation.coordinate.latitude,fromLocation.coordinate.longitude];
     
-    NSString *toCoord = [NSString stringWithFormat:@"(%f,%f)",toLocation.coordinate.latitude,toLocation.coordinate.longitude];
+    //NSString *toCoord = [NSString stringWithFormat:@"(%f,%f)",toLocation.coordinate.latitude,toLocation.coordinate.longitude];
     
     return distance;
 }

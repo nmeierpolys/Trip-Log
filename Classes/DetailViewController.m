@@ -10,6 +10,7 @@
 #import <MessageUI/MessageUI.h>
 #import <QuartzCore/CoreAnimation.h>
 #import <UIKit/UIKit.h>
+#import <AddressBook/AddressBook.h>
 
 
 @implementation DetailViewController
@@ -253,31 +254,34 @@
     
     tempAnnotation = [[MyLocation alloc] initWithName:name address:address coordinate:coordinate time:time];
     
-    MKReverseGeocoder *rvg = [[MKReverseGeocoder alloc] initWithCoordinate:coordinate];
-    rvg.delegate = self;
-    [rvg start];
-}
-
-- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFailWithError:(NSError *)error {
-    NSString *subtitle = [NSString stringWithFormat:@"No address: %@",tempAnnotation.coordName];
-    [tempAnnotation setSubtitle:subtitle];
-    [selectedTrip addLocation:tempAnnotation];
-    [_mapView addAnnotation:tempAnnotation];    
+    CLGeocoder *geo = [[CLGeocoder alloc] init];
+    [geo reverseGeocodeLocation:newLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+        if(error)
+        {
+            NSString *subtitle = [NSString stringWithFormat:@"No address: %@",tempAnnotation.coordName];
+            [tempAnnotation setSubtitle:subtitle];
+            [selectedTrip addLocation:tempAnnotation];
+            [_mapView addAnnotation:tempAnnotation];    
+            
+            summaryBody.text = [self tripSummary:selectedTrip];
+            summarySubTitle.text = [self tripNumPoints:selectedTrip];
+        }
+        else
+        {
+            CLPlacemark *placemark = [placemarks objectAtIndex:0];
+            
+            NSString *subtitle = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
+            
+            [tempAnnotation setSubtitle:subtitle];
+            [selectedTrip addLocation:tempAnnotation];
+            [_mapView addAnnotation:tempAnnotation];
+            
+            summaryBody.text = [self tripSummary:selectedTrip];
+            summarySubTitle.text = [self tripNumPoints:selectedTrip];
+        
+        }
+    }];
     
-    summaryBody.text = [self tripSummary:selectedTrip];
-    summarySubTitle.text = [self tripNumPoints:selectedTrip];
-}
-
-- (void)reverseGeocoder:(MKReverseGeocoder *)geocoder didFindPlacemark:(MKPlacemark *)placemark {
-    //NSString *subtitle = [NSString stringWithFormat:@"%@",tempAnnotation.coordName];
-    NSString *subtitle = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
-    
-    [tempAnnotation setSubtitle:subtitle];
-    [selectedTrip addLocation:tempAnnotation];
-    [_mapView addAnnotation:tempAnnotation];
-    
-    summaryBody.text = [self tripSummary:selectedTrip];
-    summarySubTitle.text = [self tripNumPoints:selectedTrip];
 }
 
 - (void)updateAnnotations{
