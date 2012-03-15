@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -47,6 +47,9 @@
 		B4E4E133145A6ADF00ED4D33 /* Trip.m in Sources */ = {isa = PBXBuildFile; fileRef = B4E4E130145A6ADF00ED4D33 /* Trip.m */; };
 		B4E4E135145A739600ED4D33 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B4E4E134145A739600ED4D33 /* CoreLocation.framework */; };
 		B4E4E13B145A87D000ED4D33 /* CoreLocationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B4E4E13A145A87D000ED4D33 /* CoreLocationController.m */; };
+		F1064DAF1511BE1500475567 /* APIWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = F1064DAD1511BD4400475567 /* APIWorker.m */; };
+		F1064DB01511BE1A00475567 /* Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = F1064DA81511BD4400475567 /* Controller.m */; };
+		F1064DB11511BE2900475567 /* Wrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F1064DAA1511BD4400475567 /* Wrapper.m */; };
 		F1385CF814F027FC00596B26 /* MainWindowIPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1385CF714F027FC00596B26 /* MainWindowIPad.xib */; };
 		F1385CF914F029AD00596B26 /* earth2-withpins72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = F185152714D8DD9800F01EAE /* earth2-withpins72x72.png */; };
 		F161EA331505F565007466CB /* gears.png in Resources */ = {isa = PBXBuildFile; fileRef = F161EA321505F565007466CB /* gears.png */; };
@@ -131,6 +134,13 @@
 		B4E4E134145A739600ED4D33 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B4E4E139145A87D000ED4D33 /* CoreLocationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreLocationController.h; sourceTree = "<group>"; };
 		B4E4E13A145A87D000ED4D33 /* CoreLocationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreLocationController.m; sourceTree = "<group>"; };
+		F1064DA71511BD4400475567 /* Controller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Controller.h; sourceTree = "<group>"; };
+		F1064DA81511BD4400475567 /* Controller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Controller.m; sourceTree = "<group>"; };
+		F1064DA91511BD4400475567 /* Wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Wrapper.h; sourceTree = "<group>"; };
+		F1064DAA1511BD4400475567 /* Wrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Wrapper.m; sourceTree = "<group>"; };
+		F1064DAB1511BD4400475567 /* WrapperDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WrapperDelegate.h; sourceTree = "<group>"; };
+		F1064DAC1511BD4400475567 /* APIWorker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIWorker.h; sourceTree = "<group>"; };
+		F1064DAD1511BD4400475567 /* APIWorker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APIWorker.m; sourceTree = "<group>"; };
 		F1385CF714F027FC00596B26 /* MainWindowIPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindowIPad.xib; sourceTree = "<group>"; };
 		F161EA321505F565007466CB /* gears.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gears.png; sourceTree = "<group>"; };
 		F161ECB71505F959007466CB /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
@@ -199,6 +209,13 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				F1064DA71511BD4400475567 /* Controller.h */,
+				F1064DA81511BD4400475567 /* Controller.m */,
+				F1064DA91511BD4400475567 /* Wrapper.h */,
+				F1064DAA1511BD4400475567 /* Wrapper.m */,
+				F1064DAB1511BD4400475567 /* WrapperDelegate.h */,
+				F1064DAC1511BD4400475567 /* APIWorker.h */,
+				F1064DAD1511BD4400475567 /* APIWorker.m */,
 				B4E4E12B145A6ADF00ED4D33 /* MyLocation.h */,
 				B4E4E12C145A6ADF00ED4D33 /* MyLocation.m */,
 				B4E4E12D145A6ADF00ED4D33 /* TripsView.h */,
@@ -422,10 +439,10 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "TripLog" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -494,6 +511,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1064DB11511BE2900475567 /* Wrapper.m in Sources */,
+				F1064DB01511BE1A00475567 /* Controller.m in Sources */,
+				F1064DAF1511BE1500475567 /* APIWorker.m in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* TableViewAppDelegate.m in Sources */,
 				28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */,
@@ -574,7 +594,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				PREBINDING = NO;
 				PROVISIONING_PROFILE = "A483A80D-F8F9-4475-ABBD-79658E086892";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F84BBB12-BB36-4BF5-9955-4EF1E129C58A";
 				SDKROOT = iphoneos;
@@ -612,7 +631,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
 				PROVISIONING_PROFILE = "A483A80D-F8F9-4475-ABBD-79658E086892";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A483A80D-F8F9-4475-ABBD-79658E086892";
 				SDKROOT = iphoneos;
@@ -630,7 +648,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
-				PREBINDING = NO;
 				PROVISIONING_PROFILE = "A483A80D-F8F9-4475-ABBD-79658E086892";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F84BBB12-BB36-4BF5-9955-4EF1E129C58A";
 				SDKROOT = iphoneos;

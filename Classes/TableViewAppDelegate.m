@@ -9,6 +9,8 @@
 #import "DetailViewController.h"
 #import "RootViewController.h"
 #import "SplashScreen.h"
+#import "Wrapper.h"
+#import "APIWorker.h"
 
 @implementation TableViewAppDelegate
 
@@ -39,6 +41,9 @@
 	// Configure and show the window
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
+    
+    APIWorker *APIobj = [[APIWorker alloc] init];
+    [APIobj sendIDInfo:@"TripLog"];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -54,6 +59,8 @@
     id testView = navigationController.viewControllers.lastObject;
     if([testView isKindOfClass:[DetailViewController class]])
     {
+        APIWorker *APIobj = [[APIWorker alloc] init];
+        [APIobj sendIDInfo:@"TripLog"];
         DetailViewController *detailView = navigationController.viewControllers.lastObject;
         [detailView enteringForeground];
     }

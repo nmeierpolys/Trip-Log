@@ -71,6 +71,7 @@
 @property (nonatomic, retain)
     NSMutableArray *addresses;
 @property (nonatomic, retain) IASKAppSettingsViewController *appSettingsViewController;
+@property (retain, nonatomic) IBOutlet UIImageView *imgGoogleLogo;
 - (void)zoomView:(double) zoomLevelLocal;
 - (void)loadAnnotationsToMap;
 - (void)saveInfo;
