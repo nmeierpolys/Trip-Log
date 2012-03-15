@@ -27,7 +27,6 @@
 @synthesize idleTime;
 @synthesize addresses;
 @synthesize appSettingsViewController;
-@synthesize imgGoogleLogo;
 
 - (IASKAppSettingsViewController*)appSettingsViewController {
 	if (!appSettingsViewController) {
@@ -82,13 +81,6 @@
     addresses = [[NSMutableArray alloc] init];
     
     zoomLevel = 1;
-    
-    if(UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad)
-    {
-        UIImageView* imageView = [_mapView.subviews objectAtIndex:1];
-        [self.imgGoogleLogo setImage:[imageView image]];
-        self.imgGoogleLogo.alpha = 0;
-    }
 }
 - (void) loadDefaults {
     [NSUserDefaults resetStandardUserDefaults];
@@ -156,7 +148,6 @@
     [summaryTitle release];
     [summarySubTitle release];
     [MapTypeValue release];
-    [imgGoogleLogo release];
     [super dealloc];
 }
 
@@ -493,17 +484,12 @@
             
             summaryView.transform = CGAffineTransformMakeTranslation (0, -106);
             _mapView.transform = CGAffineTransformMakeTranslation(0,-50);
-            self.imgGoogleLogo.alpha = 1;
-            // Hide the original Google logo
-            //imageView.hidden = YES;
         }
         
         [UIView commitAnimations];
         
     } else {
         //Animate out summary view
-        self.imgGoogleLogo.alpha = 0;
-        
         [UIView beginAnimations:nil context:NULL];
         [UIView setAnimationDuration:0.2];
         [UIView setAnimationCurve:UIViewAnimationCurveLinear];
@@ -614,7 +600,6 @@
     summarySubTitle = nil;
     [MapTypeValue release];
     MapTypeValue = nil;
-    [self setImgGoogleLogo:nil];
     [super viewDidUnload];
 
 }
