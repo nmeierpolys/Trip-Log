@@ -164,6 +164,7 @@
         MyLocation *location = [locations objectAtIndex:i];
         [_mapView addAnnotation:location];
     }
+    [self drawRouteLines];
     
 }
 
@@ -278,6 +279,7 @@
             
             summaryBody.text = [self tripSummary:selectedTrip];
             summarySubTitle.text = [self tripNumPoints:selectedTrip];
+            [self drawRouteLines];
         
         }
     }];
@@ -294,8 +296,36 @@
         [[selectedTrip.locations objectAtIndex:i] setName:newName];
         [[_mapView.annotations objectAtIndex:i] setName:newName];
     }
+    [self drawRouteLines];
+    
 }
 
+- (void)drawRouteLines
+{
+    //Add drawing of route line
+    
+    CLLocationCoordinate2D coordinates[self.selectedTrip.locations.count];
+    
+    int i = 0;
+    for (MyLocation *location in self.selectedTrip.locations)
+    {
+        coordinates[i] = location.coordinate;
+        i++;
+    }
+    
+    MKPolyline *route = [MKPolyline polylineWithCoordinates: coordinates count: self.selectedTrip.locations.count];
+    [self.mapView addOverlay:route];
+}
+
+- (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay {
+    
+    MKPolylineView *polylineView = [[[MKPolylineView alloc] initWithPolyline:overlay] autorelease];
+    polylineView.strokeColor = [UIColor blueColor];
+    polylineView.lineWidth = 2.0;
+    
+    return polylineView;
+    
+}
 - (NSString *)pointName:(int)index{
     if(index <0)
         return @"";
