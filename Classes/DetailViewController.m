@@ -27,6 +27,7 @@
 @synthesize idleTime;
 @synthesize addresses;
 @synthesize appSettingsViewController;
+@synthesize route;
 
 - (IASKAppSettingsViewController*)appSettingsViewController {
 	if (!appSettingsViewController) {
@@ -313,8 +314,10 @@
         i++;
     }
     
-    MKPolyline *route = [MKPolyline polylineWithCoordinates: coordinates count: self.selectedTrip.locations.count];
-    [self.mapView addOverlay:route];
+    MKPolyline *newRoute = [MKPolyline polylineWithCoordinates: coordinates count: self.selectedTrip.locations.count];
+    [self.mapView addOverlay:newRoute];
+    [self.mapView removeOverlay:route];
+    route = newRoute;
 }
 
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay {

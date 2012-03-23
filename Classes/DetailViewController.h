@@ -17,6 +17,7 @@
                                                     MFMailComposeViewControllerDelegate> {
 	CoreLocationController *CLController;
     CLGeocoder *reverseGeo;
+    MKPolyline *route;
     
     MyLocation *tempAnnotation;
     
@@ -65,6 +66,7 @@
 @property (nonatomic, retain) UIViewController *parentTable;
 @property (nonatomic, retain) NSDate *lastUpdate;
 @property (nonatomic, retain) NSDate *idleTime;
+@property (nonatomic, retain) MKPolyline *route;
 @property CLLocationDegrees previousLat;
 @property CLLocationDegrees previousLong;
 @property int selectedLocationIndex;
