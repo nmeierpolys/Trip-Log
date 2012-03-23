@@ -561,6 +561,14 @@
             NSArray *toRecipients = [NSArray arrayWithObjects:defaultEmail, nil];
             [mailer setToRecipients:toRecipients];
         }
+        UIGraphicsBeginImageContext(self.mapView.frame.size);
+        [self.mapView.layer renderInContext:UIGraphicsGetCurrentContext()];
+        UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        NSData *imageData = UIImagePNGRepresentation(image);
+        
+        [mailer addAttachmentData:imageData mimeType:@"image/png" fileName:@"My Trip Log trip.jpg"];
         
         [mailer setMessageBody:contents isHTML:NO];
         
@@ -582,12 +590,12 @@
 }
 
 -(void)saveImage{       
-    //CGImageRef screen = UIGetScreenImage();
-    //UIImage* image = [UIImage imageWithCGImage:screen];
-    //CGImageRelease(screen);
-    //UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+    CGImageRef screen = UIGetScreenImage();
+    UIImage* image = [UIImage imageWithCGImage:screen];
+    CGImageRelease(screen);
+    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
     
-    //NSData *imageData = UIImagePNGRepresentation(image);
+    NSData *imageData = UIImagePNGRepresentation(image);
 }
 
 
