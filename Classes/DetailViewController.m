@@ -114,6 +114,7 @@
     isInBackground = NO;
     [self loadDefaults];
     [self startMonitoringLocation];
+    [self drawRouteLines];
 }
 
 - (void)stopMonitoringLocation{
@@ -427,11 +428,14 @@
         spanRatio = 5;
         zoomLevel = 1;
     } else if(zoomLevel == 1) {
-        spanRatio = .1;
+        spanRatio = .5;
         zoomLevel = 2;
     } else if(zoomLevel == 2) {
-        spanRatio = .05;
+        spanRatio = .1;
         zoomLevel = 3;
+    } else if(zoomLevel == 3) {
+        spanRatio = .05;
+        zoomLevel = 4;
     } else {
         spanRatio = .001;
         zoomLevel = 0;
