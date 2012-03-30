@@ -99,7 +99,7 @@
         convertedDistance = distance;
         output = [NSString stringWithFormat:@"%.0f %@",convertedDistance,@"m"];
     } else if(unitEnum == 2) {  //miles
-        convertedDistance = distance * 0.000621371192;
+        convertedDistance = distance * 0.000189393939; //mile/ft   //mile/m=>0.000621371192
         output = [NSString stringWithFormat:@"%.1f %@",convertedDistance,@"mi"];
     } else if(unitEnum == 3) {  //feet
         convertedDistance = distance * 3.280840;
@@ -128,7 +128,7 @@
 
 - (void)computeDistancesOfLocations{
     int count = locations.count;
-    int unit = 1;
+    int unit = 3;
     
     //Only compute distances if there are multiple points
     if(count < 2)
