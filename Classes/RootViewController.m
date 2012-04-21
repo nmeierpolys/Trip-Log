@@ -12,6 +12,7 @@
 #import "Trip.h"
 #import "TSAlertView.h"
 #import "SplashScreen.h"
+#import "FlurryAnalytics.h"
 
 @implementation RootViewController
 
@@ -60,6 +61,7 @@
     
     //Move each annotation object into a dictionary and add to plistArr
     NSUInteger count = [trips count];
+     
     for (NSUInteger i = 0; i < count; i++) {
         Trip *trip = [trips objectAtIndex:i];
         if(trip != nil){
@@ -121,6 +123,8 @@
 
 
 - (void)addNew:(NSString *)tripName {
+    [FlurryAnalytics logEvent:@"NewTrip"];
+    
     //Build dummy trip and fill it with basic info
     Trip *newTrip = [[Trip alloc] init];
     NSMutableArray *newLocations = [[NSMutableArray alloc] init];
@@ -263,6 +267,15 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     
     //Move each annotation object into a dictionary and add to plistArr
     NSUInteger count = [locations count];
+    
+    //Flurry SaveTrip event
+    NSDictionary *dictionary = 
+    [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i",count], 
+     @"NumPoints", 
+     nil];
+    [FlurryAnalytics logEvent:@"SaveTrip" withParameters:dictionary];
+    
+    //Save points
     for (NSUInteger i = 0; i < count; i++) {
         MyLocation *location = [locations objectAtIndex:i];
         if(location != nil){

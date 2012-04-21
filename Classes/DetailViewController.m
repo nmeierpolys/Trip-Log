@@ -11,6 +11,7 @@
 #import <QuartzCore/CoreAnimation.h>
 #import <UIKit/UIKit.h>
 #import <AddressBook/AddressBook.h>
+#import "FlurryAnalytics.h"
 
 
 @implementation DetailViewController
@@ -94,9 +95,15 @@
     maxIdleTime = [[defaults stringForKey:@"maxIdleTime"] doubleValue];
     if(maxIdleTime < 1)
         maxIdleTime = 9999999;
-    maxIdleTime = maxIdleTime * 60;  //multiply by 60 since the setting is given in minutes but used in seconds
+    maxIdleTime = maxIdleTime * 60;  //multiply by 60 since t he setting is given in minutes but used in seconds
     updateInterval = [[defaults stringForKey:@"updateInterval"] doubleValue];
     showRouteLines = [defaults boolForKey:@"showRouteLines"];
+    
+    NSDictionary *dictionary = 
+    [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i",allowBackgroundUpdates],  @"allowBackgroundUpdates",defaultEmail, @"defaultEmail",maxIdleTime,@"maxIdleTime",updateInterval,@"updateInterval",showRouteLines,@"showRouteLines", 
+     nil];
+    
+    [FlurryAnalytics logEvent:@"SaveTrip" withParameters:dictionary];
     
 }
 
@@ -240,6 +247,8 @@
 }
 
 - (void)plotData:(CLLocationCoordinate2D)coordinate {
+    [FlurryAnalytics logEvent:@"NewLocation"];
+    
     MyLocation *lastPoint = selectedTrip.locations.lastObject;
     CLLocation *newLocation = [[CLLocation alloc] initWithCoordinate: coordinate altitude:1 horizontalAccuracy:1 verticalAccuracy:-1 timestamp:nil];
     CLLocation *oldLocation = [[CLLocation alloc] initWithCoordinate: lastPoint.coordinate altitude:1 horizontalAccuracy:1 verticalAccuracy:-1 timestamp:nil];
@@ -624,24 +633,32 @@
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error 
 {	
+    NSString *message;
 	switch (result)
 	{
 		case MFMailComposeResultCancelled:
-			NSLog(@"Mail cancelled: you cancelled the operation and no email message was queued");
+			message = @"Cancelled";
 			break;
 		case MFMailComposeResultSaved:
-			NSLog(@"Mail saved: you saved the email message in the Drafts folder");
+			message = @"Saved";
 			break;
 		case MFMailComposeResultSent:
-			NSLog(@"Mail send: the email message is queued in the outbox. It is ready to send the next time the user connects to email");
+			message = @"Sent";
 			break;
 		case MFMailComposeResultFailed:
-			NSLog(@"Mail failed: the email message was nog saved or queued, possibly due to an error");
+			message = @"Failed";
 			break;
 		default:
-			NSLog(@"Mail not sent");
+			message = @"Sent";
 			break;
 	}
+    
+    //Flurry SendMail event
+    NSDictionary *dictionary = 
+    [NSDictionary dictionaryWithObjectsAndKeys:message, 
+     @"SendMailResult", 
+     nil];
+    [FlurryAnalytics logEvent:@"SendMail" withParameters:dictionary];
     
 	[self dismissModalViewControllerAnimated:YES];
 }

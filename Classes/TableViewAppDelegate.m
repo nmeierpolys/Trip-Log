@@ -39,9 +39,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     [locationManager startUpdatingLocation];
     
     CLLocation *location = locationManager.location;
-    [locationManager stopUpdatingLocation];
-    
-    
+    [locationManager release];
     
     //Update Flurry's location for this user
     [FlurryAnalytics setLatitude:location.coordinate.latitude
@@ -97,7 +95,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     }
 }
 
-- (void)applicationWillTermzinate:(UIApplication *)application {
+- (void)applicationWillTerminate:(UIApplication *)application {
 	// Save data if appropriate
     
     id testView = navigationController.viewControllers.lastObject;
