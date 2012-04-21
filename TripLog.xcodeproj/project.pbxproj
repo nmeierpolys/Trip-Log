@@ -50,6 +50,7 @@
 		F1064DAF1511BE1500475567 /* APIWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = F1064DAD1511BD4400475567 /* APIWorker.m */; };
 		F1064DB01511BE1A00475567 /* Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = F1064DA81511BD4400475567 /* Controller.m */; };
 		F1064DB11511BE2900475567 /* Wrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = F1064DAA1511BD4400475567 /* Wrapper.m */; };
+		F12E9CDB153FC654000B2B0D /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F12E9CDA153FC654000B2B0D /* libFlurryAnalytics.a */; };
 		F1385CF814F027FC00596B26 /* MainWindowIPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1385CF714F027FC00596B26 /* MainWindowIPad.xib */; };
 		F1385CF914F029AD00596B26 /* earth2-withpins72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = F185152714D8DD9800F01EAE /* earth2-withpins72x72.png */; };
 		F161EA331505F565007466CB /* gears.png in Resources */ = {isa = PBXBuildFile; fileRef = F161EA321505F565007466CB /* gears.png */; };
@@ -141,6 +142,8 @@
 		F1064DAB1511BD4400475567 /* WrapperDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WrapperDelegate.h; sourceTree = "<group>"; };
 		F1064DAC1511BD4400475567 /* APIWorker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIWorker.h; sourceTree = "<group>"; };
 		F1064DAD1511BD4400475567 /* APIWorker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APIWorker.m; sourceTree = "<group>"; };
+		F12E9CD9153FC654000B2B0D /* FlurryAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlurryAnalytics.h; sourceTree = "<group>"; };
+		F12E9CDA153FC654000B2B0D /* libFlurryAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurryAnalytics.a; sourceTree = "<group>"; };
 		F1385CF714F027FC00596B26 /* MainWindowIPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindowIPad.xib; sourceTree = "<group>"; };
 		F161EA321505F565007466CB /* gears.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gears.png; sourceTree = "<group>"; };
 		F161ECB71505F959007466CB /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
@@ -200,6 +203,7 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
+				F12E9CDB153FC654000B2B0D /* libFlurryAnalytics.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +251,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				F12E9CD8153FC654000B2B0D /* FlurryAnalytics */,
 				F185152914D8DDBB00F01EAE /* Default-Landscape~ipad.png */,
 				B45C851C147CD33E001D0ADF /* Entitlements.plist */,
 				B46C06AB147622E700BC9C5F /* Settings.bundle */,
@@ -329,6 +334,16 @@
 				B40A9E941464D1B500B332CE /* TSAlertViewMessageListViewShadow.png */,
 			);
 			name = TSAlertView;
+			sourceTree = "<group>";
+		};
+		F12E9CD8153FC654000B2B0D /* FlurryAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				F12E9CD9153FC654000B2B0D /* FlurryAnalytics.h */,
+				F12E9CDA153FC654000B2B0D /* libFlurryAnalytics.a */,
+			);
+			name = FlurryAnalytics;
+			path = "../RSS-Reader-App/FlurryAnalytics";
 			sourceTree = "<group>";
 		};
 		F161ECB51505F959007466CB /* InAppSettingsKit */ = {
@@ -558,6 +573,10 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../RSS-Reader-App/FlurryAnalytics\"",
+				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = TripLog;
 				SDKROOT = iphoneos;
@@ -576,6 +595,10 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../RSS-Reader-App/FlurryAnalytics\"",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = TripLog;
 				SDKROOT = iphoneos;
@@ -613,6 +636,10 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../RSS-Reader-App/FlurryAnalytics\"",
+				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = TripLog;
 				SDKROOT = iphoneos;

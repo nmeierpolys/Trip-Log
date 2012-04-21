@@ -48,6 +48,7 @@
     NSString *defaultEmail;
     double maxIdleTime;
     double updateInterval;
+    bool showRouteLines;
     
     //InAppSettings view
     IASKAppSettingsViewController *appSettingsViewController;

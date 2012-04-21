@@ -11,14 +11,44 @@
 #import "SplashScreen.h"
 #import "Wrapper.h"
 #import "APIWorker.h"
+#import "FlurryAnalytics.h"
 
 @implementation TableViewAppDelegate
 
 @synthesize window;
 @synthesize navigationController;
 
+void uncaughtExceptionHandler(NSException *exception) {
+    [FlurryAnalytics logError:@"Uncaught" message:[exception name] exception:exception];
+}
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
+    
+    //Set up exception handler
+    NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
+    
+    //Start Flurry session
+    [FlurryAnalytics startSession:@"8ESZMG4HR6K4A4IMIEP5"];
+    
+    //Attach Flurry to log page views on the navigation controller
+    UINavigationController *tmpNavigationController = (UINavigationController *)self.window.rootViewController;
+    
+    [FlurryAnalytics logAllPageViews:tmpNavigationController];
+    
+    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
+    [locationManager startUpdatingLocation];
+    
+    CLLocation *location = locationManager.location;
+    [locationManager stopUpdatingLocation];
+    
+    
+    
+    //Update Flurry's location for this user
+    [FlurryAnalytics setLatitude:location.coordinate.latitude
+                       longitude:location.coordinate.longitude            
+              horizontalAccuracy:location.horizontalAccuracy            
+                verticalAccuracy:location.verticalAccuracy]; 
+    
     // Set the application defaults
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
@@ -26,6 +56,7 @@
                    @"",@"defaultEmail",
                    @"10",@"maxIdleTime",
                    @"5",@"updateInterval",
+                   @"YES",@"showRouteLines",
                    nil];
     [defaults registerDefaults:appDefaults];
     [defaults synchronize];

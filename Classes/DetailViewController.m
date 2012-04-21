@@ -82,6 +82,8 @@
     addresses = [[NSMutableArray alloc] init];
     
     zoomLevel = 1;
+    
+    [self drawRouteLines];
 }
 - (void) loadDefaults {
     [NSUserDefaults resetStandardUserDefaults];
@@ -94,6 +96,8 @@
         maxIdleTime = 9999999;
     maxIdleTime = maxIdleTime * 60;  //multiply by 60 since the setting is given in minutes but used in seconds
     updateInterval = [[defaults stringForKey:@"updateInterval"] doubleValue];
+    showRouteLines = [defaults boolForKey:@"showRouteLines"];
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
@@ -101,7 +105,9 @@
     [self saveInfo];
 }
 - (void)viewDidAppear:(BOOL)animated{
+    [self loadDefaults];
     [self startMonitoringLocation];
+    [self drawRouteLines];
 }
 
 - (void)enteringBackground {
@@ -176,7 +182,6 @@
     //Unsubscribe from updates after a certain amount of idle time
     NSDate *currentTime = [NSDate date];
     NSTimeInterval interval = [currentTime timeIntervalSinceDate:self.idleTime];
-    
     if(isInBackground && (!allowBackgroundUpdates || (interval > maxIdleTime)))
         [self stopMonitoringLocation];
     
@@ -268,6 +273,7 @@
             
             summaryBody.text = [self tripSummary:selectedTrip];
             summarySubTitle.text = [self tripNumPoints:selectedTrip];
+            [self drawRouteLines];
         }
         else
         {
@@ -304,6 +310,15 @@
 
 - (void)drawRouteLines
 {
+    if(!showRouteLines)
+    {
+        if(route != nil)
+        {
+            [self.mapView removeOverlay:route];
+            route = nil;
+        }
+        return;
+    }
     //Add drawing of route line
     
     CLLocationCoordinate2D coordinates[self.selectedTrip.locations.count];
@@ -325,7 +340,7 @@
     
     MKPolylineView *polylineView = [[[MKPolylineView alloc] initWithPolyline:overlay] autorelease];
     polylineView.strokeColor = [UIColor blueColor];
-    polylineView.lineWidth = 2.0;
+    polylineView.lineWidth = 4.0;
     
     return polylineView;
     
@@ -593,14 +608,14 @@
     
 }
 
--(void)saveImage{       
-    CGImageRef screen = UIGetScreenImage();
-    UIImage* image = [UIImage imageWithCGImage:screen];
-    CGImageRelease(screen);
-    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
-    
-    NSData *imageData = UIImagePNGRepresentation(image);
-}
+//-(void)saveImage{       
+//    CGImageRef screen = UIGetScreenImage();
+//    UIImage* image = [UIImage imageWithCGImage:screen];
+//    CGImageRelease(screen);
+//    UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+//    
+//    NSData *imageData = UIImagePNGRepresentation(image);
+//}
 
 
 
