@@ -12,6 +12,7 @@
 #import <UIKit/UIKit.h>
 #import <AddressBook/AddressBook.h>
 #import "FlurryAnalytics.h"
+#import "TSAlertView.h"
 
 
 @implementation DetailViewController
@@ -103,7 +104,7 @@
     [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i",allowBackgroundUpdates],  @"allowBackgroundUpdates",defaultEmail, @"defaultEmail",maxIdleTime,@"maxIdleTime",updateInterval,@"updateInterval",showRouteLines,@"showRouteLines", 
      nil];
     
-    [FlurryAnalytics logEvent:@"SaveTrip" withParameters:dictionary];
+    [FlurryAnalytics logEvent:@"loadDefaults" withParameters:dictionary];
     
 }
 
@@ -246,6 +247,156 @@
     return distance;
 }
 
+- (UIImageView *)GetUserNoteImageView
+{
+    NSString* imageName = [[NSBundle mainBundle] pathForResource:@"document_prepare" ofType:@"png"];
+    UIImage * image = [[UIImage alloc] initWithContentsOfFile:imageName];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    [imageView setCenter:CGPointMake(imageView.center.x-3, imageView.center.y+5)];
+    [imageView setBounds:CGRectMake(imageView.center.x, imageView.center.y, 16, 16)];
+    return imageView;
+}
+
+// Generates the custom view for each annotation. Includes icon, color, and callout info.
+// Ref: http://stackoverflow.com/questions/5330788/iphone-mapview-annotation-pin-different-color
+- (MKAnnotationView *) mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>) annotation
+{
+    MKPinAnnotationView *annotationView = nil;
+    //Standard pin - no note entered
+    static NSString *defaultID = @"com.invasivecode.pin";
+    
+    annotationView = (MKPinAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:defaultID];
+    
+    if (annotation != self.mapView.userLocation) {
+        MyLocation *location = (MyLocation *)annotation;
+        
+        if (annotationView == nil) 
+            annotationView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultID] autorelease];
+        
+        annotationView.canShowCallout = YES;
+        annotationView.animatesDrop= NO;
+        
+        if(location.userNote.length > 0)
+        {
+            UIImageView *imageView = [self GetUserNoteImageView];
+            [annotationView addSubview:imageView];
+        }
+    
+        UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+        //NSInteger annotationValue = [annView indexOfObject:annotation];
+        //rightButton.tag = annotationValue;
+        [rightButton addTarget:self action:@selector(userNoteButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        annotationView.rightCalloutAccessoryView = rightButton;
+        
+    } 
+    else {
+    }
+    
+    return annotationView;
+    
+}
+
+- (void)mapView:(MKMapView *)mapView1 didSelectAnnotationView:(MKAnnotationView *)mapView2
+{
+    if (mapView2.annotation != self.mapView.userLocation) {
+        highlightedAnnotation = (MyLocation *)mapView2.annotation;
+    }
+}
+
+// Fires when user presses the + button in the current location callout view. Pops an alert.
+- (void)userNoteButtonPressed
+{ 
+    selectedLocationIndex = highlightedAnnotation.index;
+    
+    if((selectedLocationIndex < selectedTrip.locations.count) && 
+       (selectedLocationIndex >= 0))
+    {
+        MyLocation *location = [selectedTrip.locations objectAtIndex:selectedLocationIndex];
+        //////Advanced
+        TSAlertView* av = [[[TSAlertView alloc] init] autorelease];
+        NSString *header = [self pointName:selectedLocationIndex];
+        header = [NSString stringWithFormat:@"Point %i (%@)",selectedLocationIndex+1,header];
+        
+        NSString *subtitle = highlightedAnnotation.address;
+        subtitle = [subtitle stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
+        if(subtitle.length > 31)
+            subtitle = [[subtitle substringToIndex:29] stringByAppendingString:@".."];
+        
+        NSString *currentNote = location.userNote;
+        if(currentNote.length < 1)
+            currentNote = @"Add a note:";
+        
+        av.title = [NSString stringWithFormat:@"%@",header];
+        av.message = [NSString stringWithFormat:@"%@\n%@",subtitle,currentNote];
+        av.inputTextField.text = location.userNote;
+                      
+        
+        [av addButtonWithTitle: @"Ok"];
+        [av addButtonWithTitle: @"Cancel"];
+        
+        
+        av.style = TSAlertViewStyleInput;
+        av.buttonLayout = TSAlertViewButtonLayoutNormal;
+        av.delegate = (id<TSAlertViewDelegate>)self;
+        
+        [av show];
+    }
+}
+
+// This is triggered when the user presses OK or Cancel when adding a note to a point.
+// Updates the location in selectedTrip.locations and closes the callout.
+- (void) alertView: (TSAlertView *) alertView 
+didDismissWithButtonIndex: (NSInteger) buttonIndex
+{
+    if([[alertView.title substringToIndex:5] isEqualToString:@"Point"])
+        {
+        // cancel
+        if( buttonIndex == 1 )
+            return;
+        
+        NSString *userNote = alertView.inputTextField.text;
+        
+        if(userNote.length > 0){
+            //update current location with user note
+            MyLocation *highlightedLocationObj = [selectedTrip.locations objectAtIndex:selectedLocationIndex];
+            highlightedLocationObj.name = [NSString stringWithFormat:@"Point %i: %@",selectedLocationIndex+1,userNote];
+            highlightedLocationObj.userNote = userNote;
+            
+            //Add note icon
+            MKAnnotationView* aView = [_mapView viewForAnnotation:highlightedAnnotation];
+            [aView addSubview:[self GetUserNoteImageView]];
+            
+            //Close callout
+            [_mapView deselectAnnotation:(id <MKAnnotation>)highlightedAnnotation animated:NO];
+            [_mapView selectAnnotation:(id <MKAnnotation>)highlightedAnnotation animated:NO];
+            if(summaryView.alpha != 0)
+                summaryBody.text = [self tripSummary:selectedTrip];
+                
+            summaryBody.text = [self tripSummary:selectedTrip];
+        }
+        //[self printTripInfo];
+    }
+}
+
+- (void)printTripInfo
+{
+    NSString *debugMsg = @"";
+    int count = 0;
+    for(MyLocation *location in selectedTrip.locations)
+    {
+        count++;
+        debugMsg = [debugMsg stringByAppendingFormat:@"%i/%i %@\n",count,location.index,location.name];
+    }
+    
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Trip info" 
+                                                    message:debugMsg
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK" 
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
 - (void)plotData:(CLLocationCoordinate2D)coordinate {
     [FlurryAnalytics logEvent:@"NewLocation"];
     
@@ -266,10 +417,10 @@
     NSString *time = [self currentTime];
     
     
-    int newPointIndex = selectedTrip.locations.count + 1;
-    name = [NSString stringWithFormat:@"Point %i  (%@)",newPointIndex,time];
+    int newPointIndex = selectedTrip.locations.count;
+    name = [NSString stringWithFormat:@"Point %i  (%@)",newPointIndex+1,time];
     
-    tempAnnotation = [[MyLocation alloc] initWithName:name address:address coordinate:coordinate time:time];
+    tempAnnotation = [[MyLocation alloc] initWithName:name address:address coordinate:coordinate time:time index:newPointIndex];
     
     CLGeocoder *geo = [[CLGeocoder alloc] init];
     [geo reverseGeocodeLocation:newLocation completionHandler:^(NSArray *placemarks, NSError *error) {
@@ -423,6 +574,8 @@
             NSString *formattedSubtitle = [location.subtitle stringByReplacingOccurrencesOfString:@"\n"
                                                                         withString:@", "];
             output = [output stringByAppendingFormat:@"%i. %@ (%@)\n",i+1,formattedSubtitle,location.time];
+            if(location.userNote.length > 0)
+                output = [output stringByAppendingFormat:@"-- %@\n\n",location.userNote];
         }
     }
     return output;

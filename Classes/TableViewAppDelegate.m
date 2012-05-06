@@ -12,6 +12,7 @@
 #import "Wrapper.h"
 #import "APIWorker.h"
 #import "FlurryAnalytics.h"
+#import "Appirater.h"
 
 @implementation TableViewAppDelegate
 
@@ -73,6 +74,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     APIWorker *APIobj = [[APIWorker alloc] init];
     [APIobj sendIDInfo:@"TripLog"];
+    [Appirater appLaunched:YES];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -85,6 +87,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     
 }
 - (void)applicationWillEnterForeground:(UIApplication *)application {
+    [Appirater appEnteredForeground:YES];
     id testView = navigationController.viewControllers.lastObject;
     if([testView isKindOfClass:[DetailViewController class]])
     {

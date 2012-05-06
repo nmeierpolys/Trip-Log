@@ -24,7 +24,9 @@
     Trip *selectedTrip;
     
     int selectedLocationIndex;
-    
+                                                        
+    MyLocation *highlightedAnnotation;
+                                                        
     MKMapView *_mapView; 
     RootViewController *parentTable;
     

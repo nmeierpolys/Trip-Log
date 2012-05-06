@@ -15,7 +15,8 @@
     CLLocationCoordinate2D _coordinate;
     NSDate *foundDate;
     NSString *time;
-    
+    NSString *userNote;
+    int index;
 }
 
 @property (copy) NSString *name;
@@ -23,10 +24,12 @@
 @property (copy) NSString *time;
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
 @property (nonatomic, readonly) NSDate *foundDate;
+@property (copy) NSString *userNote;
+@property int index;
 
-- (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate;
+- (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate index:(int)newIndex;
 
-- (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate time:(NSString*)time;
+- (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate time:(NSString*)time index:(int)newIndex;
 
 - (id)initWithDictionary:(NSDictionary *)dictionary;
 - (NSDictionary *)convertToDictionary;

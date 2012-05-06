@@ -14,25 +14,31 @@
 @synthesize coordinate = _coordinate;
 @synthesize foundDate;
 @synthesize time;
+@synthesize userNote = _userNote;
+@synthesize index = _index;
 
-- (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate {
+- (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate index:(int)newIndex{
     if ((self = [super init])) {
         _name = [name copy];
         _address = [address copy];
         _coordinate = coordinate;
         foundDate = [NSDate date];
         time = @"";
+        userNote = @"";
+        _index = newIndex;
     }
     return self;
 }
 
-- (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate time:(NSString*)timeIn {
+- (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate time:(NSString*)timeIn index:(int)newIndex{
     if ((self = [super init])) {
         _name = [name copy];
         _address = [address copy];
         _coordinate = coordinate;
         foundDate = [NSDate date];
         self.time = timeIn;
+        userNote = @"";
+        _index = newIndex;
     }
     return self;
 }
@@ -42,6 +48,11 @@
         _name = [dictionary objectForKey:@"name"];
         _address = [dictionary objectForKey:@"address"];
         time = [dictionary objectForKey:@"time"];
+        userNote = [dictionary objectForKey:@"userNote"];
+        if(userNote == nil)
+            userNote = @"";
+        NSNumber *indexNum = (NSNumber *)[dictionary objectForKey:@"index"];
+        _index = [indexNum intValue];
     }
     [self setLat:[dictionary objectForKey:@"latitude"]];
     [self setLong:[dictionary objectForKey:@"longitude"]];
@@ -52,12 +63,15 @@
 }
 
 - (NSDictionary *)convertToDictionary{    
+    NSNumber *indexNum = [NSNumber numberWithInt:_index];
     NSDictionary *output = [[NSDictionary alloc] initWithObjectsAndKeys:
                            _name,@"name",
                            _address,@"address",
                             time,@"time",
                            [self latStr],@"latitude",
                            [self longStr],@"longitude", 
+                           _userNote,@"userNote",
+                           indexNum,@"index",
                            nil];
     return output;
 }

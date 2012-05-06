@@ -279,13 +279,14 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     for (NSUInteger i = 0; i < count; i++) {
         MyLocation *location = [locations objectAtIndex:i];
         if(location != nil){
-            if([location coordName] != nil){                
+            if([location coordName] != nil){      
                 NSDictionary *coord = [[NSDictionary alloc] initWithObjectsAndKeys:
                                        [location title],@"name",
                                        [location address],@"address",
                                        [location latStr],@"latitude",
                                        [location longStr],@"longitude", 
                                        [location time],@"time",
+                                       [location userNote],@"userNote",
                                        nil];
                 [plistArr addObject:coord];
             }
@@ -345,13 +346,17 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         NSString *name = [coord objectForKey:@"name"];
         NSString *address = [coord objectForKey:@"address"];
         NSString *time = [coord objectForKey:@"time"];
+        NSString *userNote = [coord objectForKey:@"userNote"];
         
         //Build annotation and add to _mapView
         if((latitude != nil) && (latitude != nil)){
             CLLocationCoordinate2D endCoord;
-            MyLocation *location = [[MyLocation alloc] initWithName:name address:address coordinate:endCoord time:time];
+            MyLocation *location = [[MyLocation alloc] initWithName:name address:address coordinate:endCoord time:time index:i];
             [location setLat:latitude];
             [location setLong:longitude];
+            if(userNote == nil)
+                userNote = @"";
+            [location setUserNote:userNote];
             [selectedTrip addLocation:location];
         }
     }  
