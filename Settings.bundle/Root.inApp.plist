@@ -80,6 +80,32 @@
 			<key>FalseValue</key>
 			<string>NO</string>
 		</dict>
+		<dict>
+			<key>Title</key>
+			<string>How can we improve?</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>DefaultValue</key>
+			<string></string>
+			<key>IASKMailComposeBccRecipents</key>
+			<array/>
+			<key>IASKMailComposeBodyIsHTML</key>
+			<string>NO</string>
+			<key>IASKMailComposeCcRecipents</key>
+			<array/>
+			<key>IASKMailComposeSubject</key>
+			<string>Feedback for My Trip Log app</string>
+			<key>IASKMailComposeToRecipents</key>
+			<array>
+				<string>triplogapp@gmail.com</string>
+			</array>
+			<key>Title</key>
+			<string>Send Questions or Comments</string>
+			<key>Type</key>
+			<string>IASKMailComposeSpecifier</string>
+		</dict>
 	</array>
 	<key>StringsTable</key>
 	<string>Root</string>

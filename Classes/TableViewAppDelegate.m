@@ -29,7 +29,11 @@ void uncaughtExceptionHandler(NSException *exception) {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
     //Start Flurry session
-    [FlurryAnalytics startSession:@"8ESZMG4HR6K4A4IMIEP5"];
+    //[FlurryAnalytics startSession:@"8ESZMG4HR6K4A4IMIEP5"];  //Testing
+    [FlurryAnalytics startSession:@"TDS9SNISF6JL6BSBU77K"];  //Release
+    
+    //Testing: 8ESZMG4HR6K4A4IMIEP5
+    //Release: TDS9SNISF6JL6BSBU77K
     
     //Attach Flurry to log page views on the navigation controller
     UINavigationController *tmpNavigationController = (UINavigationController *)self.window.rootViewController;
@@ -56,6 +60,7 @@ void uncaughtExceptionHandler(NSException *exception) {
                    @"10",@"maxIdleTime",
                    @"5",@"updateInterval",
                    @"YES",@"showRouteLines",
+                   @"YES",@"showPins",
                    nil];
     [defaults registerDefaults:appDefaults];
     [defaults synchronize];
@@ -72,8 +77,8 @@ void uncaughtExceptionHandler(NSException *exception) {
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
     
-    APIWorker *APIobj = [[APIWorker alloc] init];
-    [APIobj sendIDInfo:@"TripLog"];
+    //APIWorker *APIobj = [[APIWorker alloc] init];
+    //[APIobj sendIDInfo:@"TripLog"];
     [Appirater appLaunched:YES];
 }
 
@@ -91,8 +96,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     id testView = navigationController.viewControllers.lastObject;
     if([testView isKindOfClass:[DetailViewController class]])
     {
-        APIWorker *APIobj = [[APIWorker alloc] init];
-        [APIobj sendIDInfo:@"TripLog"];
+        //APIWorker *APIobj = [[APIWorker alloc] init];
+        //[APIobj sendIDInfo:@"TripLog"];
         DetailViewController *detailView = navigationController.viewControllers.lastObject;
         [detailView enteringForeground];
     }

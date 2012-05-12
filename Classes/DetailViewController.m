@@ -77,9 +77,11 @@
     
     self.idleTime = [[NSDate alloc] init];
     
-    [self loadAnnotationsToMap];
+    showPins = true;
     
     [self loadDefaults];
+    
+    [self loadAnnotationsToMap];
     
     addresses = [[NSMutableArray alloc] init];
     
@@ -99,13 +101,7 @@
     maxIdleTime = maxIdleTime * 60;  //multiply by 60 since t he setting is given in minutes but used in seconds
     updateInterval = [[defaults stringForKey:@"updateInterval"] doubleValue];
     showRouteLines = [defaults boolForKey:@"showRouteLines"];
-    
-    NSDictionary *dictionary = 
-    [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i",allowBackgroundUpdates],  @"allowBackgroundUpdates",defaultEmail, @"defaultEmail",maxIdleTime,@"maxIdleTime",updateInterval,@"updateInterval",showRouteLines,@"showRouteLines", 
-     nil];
-    
-    [FlurryAnalytics logEvent:@"loadDefaults" withParameters:dictionary];
-    
+    showPins = [defaults boolForKey:@"showPins"];
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
@@ -114,6 +110,41 @@
 }
 - (void)viewDidAppear:(BOOL)animated{
     [self loadDefaults];
+    
+    if(changedSettings)
+    {
+        changedSettings = false;
+        
+        //Change from Showing pins -> not showing pins
+        if(previousShowPins && !showPins)
+        {
+            for (id annotation in _mapView.annotations) {
+                if (![annotation isKindOfClass:[MKUserLocation class]])
+                    [_mapView removeAnnotation:annotation];
+            } 
+        }
+        
+        //Change from not showing pins -> showing pins
+        if(!previousShowPins && showPins)
+        {
+            for(MyLocation *location in self.selectedTrip.locations)
+            {
+                [_mapView addAnnotation:location];
+            }
+        }
+        previousShowPins = showPins;
+        
+        NSDictionary *dictionary = 
+        [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i",allowBackgroundUpdates],  @"allowBackgroundUpdates",
+                                                    defaultEmail, @"defaultEmail",
+                                                    [NSString stringWithFormat:@"%i",maxIdleTime], @"maxIdleTime",
+                                                    [NSString stringWithFormat:@"%i",updateInterval], @"updateInterval",
+                                                    [NSString stringWithFormat:@"%i",showRouteLines], @"showRouteLines",
+                                                    [NSString stringWithFormat:@"%i",showPins], @"showPins",
+                                                    nil];
+        [FlurryAnalytics logEvent:@"loadDefaults" withParameters:dictionary];
+    }
+    
     [self startMonitoringLocation];
     [self drawRouteLines];
 }
@@ -173,15 +204,14 @@
     //Clear existing mapview annotations
     //[self removeAllAnnotations];
     
-    NSMutableArray *locations = [selectedTrip locations];
-    
-	int count = locations.count;
-    for(int i=0;i<count;i++){
-        MyLocation *location = [locations objectAtIndex:i];
-        [_mapView addAnnotation:location];
+    if(showPins)
+    {
+        for(MyLocation *location in self.selectedTrip.locations){
+            [_mapView addAnnotation:location];
+        }
     }
-    [self drawRouteLines];
     
+    [self drawRouteLines];
 }
 
 - (void)locationUpdate:(CLLocation *)location {
@@ -262,7 +292,10 @@
 - (MKAnnotationView *) mapView:(MKMapView *)mapView viewForAnnotation:(id <MKAnnotation>) annotation
 {
     MKPinAnnotationView *annotationView = nil;
-    //Standard pin - no note entered
+    if(!showPins)
+        return nil;
+    
+    //Standard pin - no  note entered
     static NSString *defaultID = @"com.invasivecode.pin";
     
     annotationView = (MKPinAnnotationView *)[self.mapView dequeueReusableAnnotationViewWithIdentifier:defaultID];
@@ -280,6 +313,15 @@
         {
             UIImageView *imageView = [self GetUserNoteImageView];
             [annotationView addSubview:imageView];
+            annotationView.pinColor = MKPinAnnotationColorPurple;
+        }
+        else {
+            for(UIView *view in annotationView.subviews)
+            {
+                [view removeFromSuperview];
+            }
+            
+            annotationView.pinColor = MKPinAnnotationColorRed;
         }
     
         UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
@@ -355,26 +397,41 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
             return;
         
         NSString *userNote = alertView.inputTextField.text;
-        
-        if(userNote.length > 0){
-            //update current location with user note
-            MyLocation *highlightedLocationObj = [selectedTrip.locations objectAtIndex:selectedLocationIndex];
-            highlightedLocationObj.name = [NSString stringWithFormat:@"Point %i: %@",selectedLocationIndex+1,userNote];
-            highlightedLocationObj.userNote = userNote;
             
-            //Add note icon
-            MKAnnotationView* aView = [_mapView viewForAnnotation:highlightedAnnotation];
+        MKAnnotationView* aView = [_mapView viewForAnnotation:highlightedAnnotation];
+        MyLocation *initialAnnotation = highlightedAnnotation;
+            
+        //update current location with user note
+        MyLocation *highlightedLocationObj = [selectedTrip.locations objectAtIndex:selectedLocationIndex];
+        if (userNote.length > 0) {
+            highlightedLocationObj.name = [NSString stringWithFormat:@"Point %i: %@",selectedLocationIndex+1,userNote];
+        }
+        else {
+            highlightedLocationObj.name = [NSString stringWithFormat:@"Point %i  (%@)",selectedLocationIndex+1,highlightedLocationObj.time];
+        }
+        
+        highlightedLocationObj.userNote = userNote;
+        
+        [_mapView removeAnnotation:initialAnnotation];
+        [_mapView addAnnotation:highlightedLocationObj];
+            
+        //Add note icon or clear previous note icon
+        if(userNote.length > 0)
+        {
             [aView addSubview:[self GetUserNoteImageView]];
             
-            //Close callout
-            [_mapView deselectAnnotation:(id <MKAnnotation>)highlightedAnnotation animated:NO];
-            [_mapView selectAnnotation:(id <MKAnnotation>)highlightedAnnotation animated:NO];
-            if(summaryView.alpha != 0)
-                summaryBody.text = [self tripSummary:selectedTrip];
-                
-            summaryBody.text = [self tripSummary:selectedTrip];
+            NSDictionary *dictionary = 
+            [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i",userNote.length],  @"length",nil];
+            [FlurryAnalytics logEvent:@"AddNote" withParameters:dictionary];
         }
-        //[self printTripInfo];
+        
+        //Reload callout
+        //[_mapView deselectAnnotation:(id <MKAnnotation>)highlightedAnnotation animated:NO];
+        [_mapView selectAnnotation:(id <MKAnnotation>)highlightedAnnotation animated:NO];
+        if(summaryView.alpha != 0)
+            summaryBody.text = [self tripSummary:selectedTrip];
+            
+        summaryBody.text = [self tripSummary:selectedTrip];
     }
 }
 
@@ -429,7 +486,8 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
             NSString *subtitle = [NSString stringWithFormat:@"No address: %@",tempAnnotation.coordName];
             [tempAnnotation setSubtitle:subtitle];
             [selectedTrip addLocation:tempAnnotation];
-            [_mapView addAnnotation:tempAnnotation];    
+            if(showPins)
+                [_mapView addAnnotation:tempAnnotation];    
             
             summaryBody.text = [self tripSummary:selectedTrip];
             summarySubTitle.text = [self tripNumPoints:selectedTrip];
@@ -443,7 +501,8 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
             
             [tempAnnotation setSubtitle:subtitle];
             [selectedTrip addLocation:tempAnnotation];
-            [_mapView addAnnotation:tempAnnotation];
+            if(showPins)
+                [_mapView addAnnotation:tempAnnotation];
             
             summaryBody.text = [self tripSummary:selectedTrip];
             summarySubTitle.text = [self tripNumPoints:selectedTrip];
@@ -575,7 +634,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
                                                                         withString:@", "];
             output = [output stringByAppendingFormat:@"%i. %@ (%@)\n",i+1,formattedSubtitle,location.time];
             if(location.userNote.length > 0)
-                output = [output stringByAppendingFormat:@"-- %@\n\n",location.userNote];
+                output = [output stringByAppendingFormat:@" -- %@\n\n",location.userNote];
         }
     }
     return output;
@@ -720,8 +779,10 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 
 - (void)openConfig
 {
+    previousShowPins = showPins;
 	self.appSettingsViewController.showDoneButton = NO;
 	[self.navigationController pushViewController:self.appSettingsViewController animated:YES];
+    changedSettings = true;
 }
 
 - (void)openMail

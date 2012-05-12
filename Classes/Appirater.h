@@ -56,7 +56,7 @@ extern NSString *const kAppiraterReminderRequestDate;
 
 /*
  This is the message your users will see once they've passed the day+launches
- threshold.
+ threshold.`
  */
 #define APPIRATER_LOCALIZED_MESSAGE     NSLocalizedString(@"If you enjoy using %@, would you mind taking a moment to rate it? It won't take more than a minute. Thanks for your support!", nil)
 #define APPIRATER_MESSAGE				[NSString stringWithFormat:APPIRATER_LOCALIZED_MESSAGE, APPIRATER_APP_NAME]
@@ -99,7 +99,7 @@ extern NSString *const kAppiraterReminderRequestDate;
  Users need to 'use' the same version of the app this many times before
  before they will be prompted to rate it.
  */
-#define APPIRATER_USES_UNTIL_PROMPT		8		// integer
+#define APPIRATER_USES_UNTIL_PROMPT		15		// integer
 
 /*
  A significant event can be anything you want to be in your app. In a
@@ -119,13 +119,13 @@ extern NSString *const kAppiraterReminderRequestDate;
  'Remind me later'. This value specifies how long (in days) Appirater
  will wait before reminding them.
  */
-#define APPIRATER_TIME_BEFORE_REMINDING		1	// double
+#define APPIRATER_TIME_BEFORE_REMINDING		2	// double
 
 /*
  'YES' will show the Appirater alert everytime. Useful for testing how your message
  looks and making sure the link to your app's review page works.
  */
-#define APPIRATER_DEBUG				YES
+#define APPIRATER_DEBUG				NO
 
 @interface Appirater : NSObject <UIAlertViewDelegate> {
 

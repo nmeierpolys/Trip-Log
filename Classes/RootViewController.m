@@ -336,7 +336,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     if(plistArr.count == 0)
         return;
     //Translate plist array into annotation objects and add to _mapView
-    NSUInteger count = [plistArr count]-1;
+    NSUInteger count = [plistArr count];
     for (NSUInteger i = 0; i < count; i++) {
         
         //Retrieve objects out of this element's dictionary
@@ -456,7 +456,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	
 	//[self saveTripToPlist:indexPath.row];
-	
+	[self setEditing:NO animated:NO];
 	//Initialize the detail view controller and display it.
     DetailViewController *dvController;
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)

@@ -84,6 +84,7 @@
 		F185152614D8DBC100F01EAE /* imgres.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = F185152514D8DBC100F01EAE /* imgres.jpeg */; };
 		F189E94C15564DAE007B381C /* note_edit.png in Resources */ = {isa = PBXBuildFile; fileRef = F189E94515564DAE007B381C /* note_edit.png */; };
 		F189E94E15564DAE007B381C /* document_prepare.png in Resources */ = {isa = PBXBuildFile; fileRef = F189E94715564DAE007B381C /* document_prepare.png */; };
+		F194D4C4155ED4150041A74E /* Root.inApp.plist in Resources */ = {isa = PBXBuildFile; fileRef = F194D4C3155ED4150041A74E /* Root.inApp.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -199,6 +200,7 @@
 		F185152914D8DDBB00F01EAE /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		F189E94515564DAE007B381C /* note_edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = note_edit.png; sourceTree = "<group>"; };
 		F189E94715564DAE007B381C /* document_prepare.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = document_prepare.png; sourceTree = "<group>"; };
+		F194D4C3155ED4150041A74E /* Root.inApp.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Root.inApp.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,41 +268,30 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				F10CB8C41555E627008B12DD /* SystemConfiguration.framework */,
-				F10CB8C21555E620008B12DD /* CFNetwork.framework */,
-				F12E9CD8153FC654000B2B0D /* FlurryAnalytics */,
-				F185152914D8DDBB00F01EAE /* Default-Landscape~ipad.png */,
-				B45C851C147CD33E001D0ADF /* Entitlements.plist */,
-				B46C06AB147622E700BC9C5F /* Settings.bundle */,
 				080E96DDFE201D6D7F000001 /* Classes */,
-				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
-				F185152214D79FB400F01EAE /* iPad */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
 		};
-		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				28A0AAE50D9B0CCF005BE974 /* TripLog_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
-			);
-			name = "Other Sources";
-			sourceTree = "<group>";
-		};
-		29B97317FDCFA39411CA2CEA /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				F189E94515564DAE007B381C /* note_edit.png */,
-				F189E94715564DAE007B381C /* document_prepare.png */,
-				F161EA321505F565007466CB /* gears.png */,
+				B45C851C147CD33E001D0ADF /* Entitlements.plist */,
+				B46C06AB147622E700BC9C5F /* Settings.bundle */,
+				F194D4C3155ED4150041A74E /* Root.inApp.plist */,
 				B47745D41474D6F100B9513F /* linen_bg_tile.jpg */,
+				F185152514D8DBC100F01EAE /* imgres.jpeg */,
 				B45870B41478AAC500F0F8D5 /* Default@2x.png */,
 				B45870AB1478A90400F0F8D5 /* Default.png */,
-				F185152514D8DBC100F01EAE /* imgres.jpeg */,
+				F161EA321505F565007466CB /* gears.png */,
+				F189E94515564DAE007B381C /* note_edit.png */,
+				F185152914D8DDBB00F01EAE /* Default-Landscape~ipad.png */,
+				F189E94715564DAE007B381C /* document_prepare.png */,
 				B45870A31478A81500F0F8D5 /* earth2-withpins.png */,
 				B45870B01478AA7E00F0F8D5 /* earth2-withpins-small.png */,
 				F185152714D8DD9800F01EAE /* earth2-withpins72x72.png */,
@@ -326,8 +317,11 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F12E9CD8153FC654000B2B0D /* FlurryAnalytics */,
 				F161ECB51505F959007466CB /* InAppSettingsKit */,
 				B40A9E8C1464D14F00B332CE /* TSAlertView */,
+				F10CB8C41555E627008B12DD /* SystemConfiguration.framework */,
+				F10CB8C21555E620008B12DD /* CFNetwork.framework */,
 				B4E4E120145A680E00ED4D33 /* MapKit.framework */,
 				B42D3A121467B02200EA1754 /* MessageUI.framework */,
 				B4E4E134145A739600ED4D33 /* CoreLocation.framework */,
@@ -440,13 +434,6 @@
 			path = Xibs;
 			sourceTree = "<group>";
 		};
-		F185152214D79FB400F01EAE /* iPad */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = iPad;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -537,6 +524,7 @@
 				F161ECF21505F95A007466CB /* IASKSpecifierValuesView.xib in Resources */,
 				F189E94C15564DAE007B381C /* note_edit.png in Resources */,
 				F189E94E15564DAE007B381C /* document_prepare.png in Resources */,
+				F194D4C4155ED4150041A74E /* Root.inApp.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,7 +582,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../RSS-Reader-App/FlurryAnalytics\"",
@@ -616,7 +604,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../RSS-Reader-App/FlurryAnalytics\"",
@@ -638,7 +626,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PROVISIONING_PROFILE = "A483A80D-F8F9-4475-ABBD-79658E086892";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F84BBB12-BB36-4BF5-9955-4EF1E129C58A";
 				SDKROOT = iphoneos;
@@ -657,7 +645,7 @@
 				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../RSS-Reader-App/FlurryAnalytics\"",
@@ -678,7 +666,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "A483A80D-F8F9-4475-ABBD-79658E086892";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A483A80D-F8F9-4475-ABBD-79658E086892";
@@ -696,7 +684,7 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PROVISIONING_PROFILE = "A483A80D-F8F9-4475-ABBD-79658E086892";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F84BBB12-BB36-4BF5-9955-4EF1E129C58A";
 				SDKROOT = iphoneos;

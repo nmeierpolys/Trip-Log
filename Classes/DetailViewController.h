@@ -33,6 +33,7 @@
     int zoomLevel;
     bool isUpdating;
     bool isInBackground;
+    bool changedSettings;
     
     NSDate *lastUpdate;
     NSDate *idleTime;
@@ -51,6 +52,8 @@
     double maxIdleTime;
     double updateInterval;
     bool showRouteLines;
+    bool showPins;
+    bool previousShowPins;
     
     //InAppSettings view
     IASKAppSettingsViewController *appSettingsViewController;
@@ -95,6 +98,5 @@
 - (void)loadDefaults;
 - (void)stopMonitoringLocation;
 - (void)startMonitoringLocation;
-
 
 @end
