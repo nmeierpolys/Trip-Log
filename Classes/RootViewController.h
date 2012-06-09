@@ -5,6 +5,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Trip.h"
+#import "InAppPurchaseManager.h"
 
 @interface RootViewController : UITableViewController <UIApplicationDelegate> {
 	
@@ -13,6 +14,7 @@
     int updatedRow;
     Trip *updatedTrip;
     bool hasUnsavedChanges;
+    InAppPurchaseManager *inAppPurchaseManager;
 }
 
 @property (nonatomic, retain) NSMutableArray *trips;

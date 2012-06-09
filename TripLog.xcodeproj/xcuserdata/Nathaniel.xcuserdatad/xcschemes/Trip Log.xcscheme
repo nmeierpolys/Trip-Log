@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
                BuildableName = "TripLog.app"
-               BlueprintName = "Trip Log"
+               BlueprintName = "Trip Log Free"
                ReferencedContainer = "container:TripLog.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -34,14 +34,14 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
             BuildableName = "TripLog.app"
-            BlueprintName = "Trip Log"
+            BlueprintName = "Trip Log Free"
             ReferencedContainer = "container:TripLog.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
    <LaunchAction
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Debug"
@@ -53,7 +53,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
             BuildableName = "TripLog.app"
-            BlueprintName = "Trip Log"
+            BlueprintName = "Trip Log Free"
             ReferencedContainer = "container:TripLog.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -71,7 +71,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "1D6058900D05DD3D006BFB54"
             BuildableName = "TripLog.app"
-            BlueprintName = "Trip Log"
+            BlueprintName = "Trip Log Free"
             ReferencedContainer = "container:TripLog.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

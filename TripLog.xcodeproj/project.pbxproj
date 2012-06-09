@@ -56,6 +56,9 @@
 		F12E9CDB153FC654000B2B0D /* libFlurryAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F12E9CDA153FC654000B2B0D /* libFlurryAnalytics.a */; };
 		F1385CF814F027FC00596B26 /* MainWindowIPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F1385CF714F027FC00596B26 /* MainWindowIPad.xib */; };
 		F1385CF914F029AD00596B26 /* earth2-withpins72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = F185152714D8DD9800F01EAE /* earth2-withpins72x72.png */; };
+		F13D17131583A1D500D89DF0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F13D17121583A1D500D89DF0 /* StoreKit.framework */; };
+		F13D17171583A20300D89DF0 /* InAppPurchaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F13D17161583A20300D89DF0 /* InAppPurchaseManager.m */; };
+		F13D171A1583A35800D89DF0 /* SKProduct+LocalizedPrice.m in Sources */ = {isa = PBXBuildFile; fileRef = F13D17191583A35800D89DF0 /* SKProduct+LocalizedPrice.m */; };
 		F161EA331505F565007466CB /* gears.png in Resources */ = {isa = PBXBuildFile; fileRef = F161EA321505F565007466CB /* gears.png */; };
 		F161ECDE1505F95A007466CB /* IASKAppSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F161ECB81505F959007466CB /* IASKAppSettingsViewController.m */; };
 		F161ECDF1505F95A007466CB /* IASKAppSettingsWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F161ECBA1505F959007466CB /* IASKAppSettingsWebViewController.m */; };
@@ -155,6 +158,11 @@
 		F12E9CD9153FC654000B2B0D /* FlurryAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlurryAnalytics.h; sourceTree = "<group>"; };
 		F12E9CDA153FC654000B2B0D /* libFlurryAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFlurryAnalytics.a; sourceTree = "<group>"; };
 		F1385CF714F027FC00596B26 /* MainWindowIPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindowIPad.xib; sourceTree = "<group>"; };
+		F13D17121583A1D500D89DF0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		F13D17151583A20300D89DF0 /* InAppPurchaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InAppPurchaseManager.h; sourceTree = "<group>"; };
+		F13D17161583A20300D89DF0 /* InAppPurchaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InAppPurchaseManager.m; sourceTree = "<group>"; };
+		F13D17181583A35800D89DF0 /* SKProduct+LocalizedPrice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKProduct+LocalizedPrice.h"; sourceTree = "<group>"; };
+		F13D17191583A35800D89DF0 /* SKProduct+LocalizedPrice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKProduct+LocalizedPrice.m"; sourceTree = "<group>"; };
 		F161EA321505F565007466CB /* gears.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gears.png; sourceTree = "<group>"; };
 		F161ECB71505F959007466CB /* IASKAppSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IASKAppSettingsViewController.h; sourceTree = "<group>"; };
 		F161ECB81505F959007466CB /* IASKAppSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IASKAppSettingsViewController.m; sourceTree = "<group>"; };
@@ -208,6 +216,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F13D17131583A1D500D89DF0 /* StoreKit.framework in Frameworks */,
 				F10CB8C51555E627008B12DD /* SystemConfiguration.framework in Frameworks */,
 				F10CB8C31555E620008B12DD /* CFNetwork.framework in Frameworks */,
 				B42D3A1B14703EB200EA1754 /* QuartzCore.framework in Frameworks */,
@@ -253,6 +262,10 @@
 				B4E4E13A145A87D000ED4D33 /* CoreLocationController.m */,
 				B46C06B01476369E00BC9C5F /* SplashScreen.h */,
 				B46C06B11476369E00BC9C5F /* SplashScreen.m */,
+				F13D17151583A20300D89DF0 /* InAppPurchaseManager.h */,
+				F13D17161583A20300D89DF0 /* InAppPurchaseManager.m */,
+				F13D17181583A35800D89DF0 /* SKProduct+LocalizedPrice.h */,
+				F13D17191583A35800D89DF0 /* SKProduct+LocalizedPrice.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -317,6 +330,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F13D17121583A1D500D89DF0 /* StoreKit.framework */,
 				F12E9CD8153FC654000B2B0D /* FlurryAnalytics */,
 				F161ECB51505F959007466CB /* InAppSettingsKit */,
 				B40A9E8C1464D14F00B332CE /* TSAlertView */,
@@ -437,9 +451,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1D6058900D05DD3D006BFB54 /* Trip Log */ = {
+		1D6058900D05DD3D006BFB54 /* Trip Log Free */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Trip Log" */;
+			buildConfigurationList = 1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Trip Log Free" */;
 			buildPhases = (
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
@@ -449,7 +463,7 @@
 			);
 			dependencies = (
 			);
-			name = "Trip Log";
+			name = "Trip Log Free";
 			productName = TableView;
 			productReference = 1D6058910D05DD3D006BFB54 /* TripLog.app */;
 			productType = "com.apple.product-type.application";
@@ -477,7 +491,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1D6058900D05DD3D006BFB54 /* Trip Log */,
+				1D6058900D05DD3D006BFB54 /* Trip Log Free */,
 			);
 		};
 /* End PBXProject section */
@@ -564,6 +578,8 @@
 				F161ECEA1505F95A007466CB /* IASKSlider.m in Sources */,
 				F161ECEB1505F95A007466CB /* IASKSwitch.m in Sources */,
 				F161ECEC1505F95A007466CB /* IASKTextField.m in Sources */,
+				F13D17171583A20300D89DF0 /* InAppPurchaseManager.m in Sources */,
+				F13D171A1583A35800D89DF0 /* SKProduct+LocalizedPrice.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,6 +590,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Nathaniel Meierpolys (TKN239JDGX)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Nathaniel Meierpolys (TKN239JDGX)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -589,6 +607,8 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = TripLog;
+				PROVISIONING_PROFILE = "F52AA42B-8B81-406A-8E70-4D23BF675A5D";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D84E08D7-4B95-4996-95F9-0D17E35F5DCE";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -598,6 +618,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Nathaniel Meierpolys (TKN239JDGX)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Nathaniel Meierpolys (TKN239JDGX)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TripLog_Prefix.pch;
@@ -611,6 +633,8 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = TripLog;
+				PROVISIONING_PROFILE = "D84E08D7-4B95-4996-95F9-0D17E35F5DCE";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D84E08D7-4B95-4996-95F9-0D17E35F5DCE";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -639,6 +663,8 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_ENTITLEMENTS = Entitlements.plist;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Nathaniel Meierpolys";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Nathaniel Meierpolys (TKN239JDGX)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = TripLog_Prefix.pch;
@@ -652,6 +678,8 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = TripLog;
+				PROVISIONING_PROFILE = "C18E5DD4-C64F-4841-8764-445BADF2FB26";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D84E08D7-4B95-4996-95F9-0D17E35F5DCE";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -695,7 +723,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Trip Log" */ = {
+		1D6058960D05DD3E006BFB54 /* Build configuration list for PBXNativeTarget "Trip Log Free" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1D6058940D05DD3E006BFB54 /* Debug */,

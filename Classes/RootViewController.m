@@ -13,6 +13,7 @@
 #import "TSAlertView.h"
 #import "SplashScreen.h"
 #import "FlurryAnalytics.h"
+#import "InAppPurchaseManager.h"
 
 @implementation RootViewController
 
@@ -31,7 +32,7 @@
 	self.navigationItem.title = @"Trip Log";
     self.navigationItem.leftBarButtonItem = self.editButtonItem;    
     
-    UIBarButtonItem *tempButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(importTap)];
+    UIBarButtonItem *tempButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonTap)];
     self.navigationItem.rightBarButtonItem = tempButton;
     [tempButton release];
     
@@ -136,7 +137,6 @@
 
 - (void)addNew:(NSString *)tripName {
     [FlurryAnalytics logEvent:@"NewTrip"];
-    
     //Build dummy trip and fill it with basic info
     Trip *newTrip = [[Trip alloc] init];
     NSMutableArray *newLocations = [[NSMutableArray alloc] init];
@@ -169,8 +169,7 @@
     [self saveTripListToPlist];
 }
 
-
-- (void) importTap
+- (void)ShowAddTripDialog
 {
     TSAlertView* av = [[[TSAlertView alloc] init] autorelease];
     av.title = @"Trip name:";
@@ -185,6 +184,46 @@
     av.delegate = (id<TSAlertViewDelegate>)self;
     
     [av show];
+}
+
+- (void)GetUpgradeOrFailAddTrip
+{
+    if(inAppPurchaseManager == nil)
+        inAppPurchaseManager = [[InAppPurchaseManager alloc] init];
+    
+    [inAppPurchaseManager requestProUpgradeProductData];
+    [inAppPurchaseManager loadStore];
+}
+
+- (void) addButtonTap
+{
+    
+    bool isProUpgradePurchased = [[NSUserDefaults standardUserDefaults] boolForKey:@"isProUpgradePurchased"];
+    
+    //Need to check license when user has more than one trip and 
+    //wants to add another
+    if((trips.count > 0) && (!isProUpgradePurchased))
+    {
+        //Give option to purchase upgrade
+        [self GetUpgradeOrFailAddTrip];
+        
+        isProUpgradePurchased = [[NSUserDefaults standardUserDefaults] boolForKey:@"isProUpgradePurchased"];
+        if(isProUpgradePurchased)
+        {
+            
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Successfully upgraded to Trip Log Pro." message:@"Go wild and create as many trips as you'd like" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            
+            [alertView show];
+        }
+    }
+    else 
+    {
+        //This is either the first trip created
+        //OR
+        //User has purchased the pro upgrade
+        [self ShowAddTripDialog];
+    }
+
 }
 
 // after animation
