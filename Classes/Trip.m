@@ -15,12 +15,16 @@
 @synthesize fileName;
 @synthesize cumulativeDistance;
 @synthesize directDistance;
+@synthesize logData;
+@synthesize startInstant = _startInstant;
 
 - (id)initWithName:(NSString*)name file:(NSString*)file locations:(NSMutableArray *)locationArr {
     if ((self = [super init])) {
         tripName = [name copy];
         fileName = [file copy];
         locations = locationArr;
+        logData = YES;
+        startInstant = [NSDate date];
     }
     [self computeDistancesOfLocations];
     
@@ -177,6 +181,74 @@
     //NSString *toCoord = [NSString stringWithFormat:@"(%f,%f)",toLocation.coordinate.latitude,toLocation.coordinate.longitude];
     
     return distance;
+}
+
+- (void)setLogDataWithNum:(NSNumber *)logDataNum
+{
+    if(logDataNum == nil)
+        self.logData = YES;
+    self.logData = [logDataNum boolValue];
+}
+
+- (NSNumber *)getLogDataNumber
+{
+    return [NSNumber numberWithBool:self.logData];
+}
+
+- (NSTimeInterval)intervalSinceStart
+{
+    if(self.startInstant == nil)
+        return 0;
+    return [self.startInstant timeIntervalSinceNow];
+}
+
+- (NSDate *)startInstant
+{
+//    //Get the date in order of priority
+//    //1. startInstant
+//    //2. first location's found date
+//    //3. current date
+    if(locations.count > 0)
+    {
+        MyLocation *firstLocation = [locations objectAtIndex:0];
+        if(firstLocation.datePopulated)
+            startInstant = firstLocation.foundDate;
+    }
+    return startInstant;
+}
+
+- (NSString *)currentDate{
+    NSDate *today = [NSDate date];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"M/d/yyyy"];
+    NSString *currentDate = [dateFormatter stringFromDate:today]; 
+    [dateFormatter release];
+    return [NSString stringWithFormat:@"%@",currentDate];
+}
+
+- (NSString *)startDate{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"M/d/yyyy"];
+    NSString *currentDate = [dateFormatter stringFromDate:self.startInstant]; 
+    [dateFormatter release];
+    return [NSString stringWithFormat:@"%@",currentDate];
+}
+
+- (NSString *)dateRangeString
+{
+    if(self.startInstant == nil)
+    {
+        return [self currentDate];
+    }
+    else
+    {
+        NSString *currentDate = [self currentDate];
+        NSString *startDate = [self startDate];
+        if([currentDate isEqualToString:startDate])
+            return currentDate;
+            
+        return [NSString stringWithFormat:@"%@ - %@",startDate,currentDate];
+    }
 }
 
 

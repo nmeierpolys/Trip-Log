@@ -88,6 +88,12 @@
     zoomLevel = 1;
     
     [self drawRouteLines];
+    switchLogData.on = self.selectedTrip.logData;
+    
+    if(self.selectedTrip.logData)
+        [self startMonitoringLocation];
+    else
+        [self stopMonitoringLocation];
 }
 - (void) loadDefaults {
     [NSUserDefaults resetStandardUserDefaults];
@@ -137,15 +143,19 @@
         NSDictionary *dictionary = 
         [NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"%i",allowBackgroundUpdates],  @"allowBackgroundUpdates",
                                                     defaultEmail, @"defaultEmail",
-                                                    [NSString stringWithFormat:@"%i",maxIdleTime], @"maxIdleTime",
-                                                    [NSString stringWithFormat:@"%i",updateInterval], @"updateInterval",
+                                                    [NSString stringWithFormat:@"%.0f",maxIdleTime], @"maxIdleTime",
+                                                    [NSString stringWithFormat:@"%.0f",updateInterval], @"updateInterval",
                                                     [NSString stringWithFormat:@"%i",showRouteLines], @"showRouteLines",
                                                     [NSString stringWithFormat:@"%i",showPins], @"showPins",
                                                     nil];
         [FlurryAnalytics logEvent:@"loadDefaults" withParameters:dictionary];
     }
     
-    [self startMonitoringLocation];
+    if(self.selectedTrip.logData)
+        [self startMonitoringLocation];
+    else
+        [self stopMonitoringLocation];
+    
     [self drawRouteLines];
 }
 
@@ -195,6 +205,7 @@
     [summaryTitle release];
     [summarySubTitle release];
     [MapTypeValue release];
+    [switchLogData release];
     [super dealloc];
 }
 
@@ -215,19 +226,8 @@
 }
 
 - (void)locationUpdate:(CLLocation *)location {
-    [self loadDefaults];    
-    
-    //Unsubscribe from updates after a certain amount of idle time
-    NSDate *currentTime = [NSDate date];
-    NSTimeInterval interval = [currentTime timeIntervalSinceDate:self.idleTime];
-    if(isInBackground && (!allowBackgroundUpdates || (interval > maxIdleTime)))
-        [self stopMonitoringLocation];
-    
     
     if(location == nil)
-        return;
-    
-    if(![self allowUpdate])
         return;
     
     if((previousLat == location.coordinate.latitude) && 
@@ -478,6 +478,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     name = [NSString stringWithFormat:@"Point %i  (%@)",newPointIndex+1,time];
     
     tempAnnotation = [[MyLocation alloc] initWithName:name address:address coordinate:coordinate time:time index:newPointIndex];
+    //tempAnnotation.intervalSinceTripStart = [selectedTrip intervalSinceStart];
     
     CLGeocoder *geo = [[CLGeocoder alloc] init];
     [geo reverseGeocodeLocation:newLocation completionHandler:^(NSArray *placemarks, NSError *error) {
@@ -625,18 +626,39 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
                            [trip directDistanceAutoformatted]];
                  
     output = distances;
+    NSString *interval = @"";
     int count = trip.locations.count;
     for(int i=0;i<count;i++){
         MyLocation *location = [trip.locations objectAtIndex:i];
+        if(location.datePopulated)
+            interval = [self formattedIntervalSinceStart:selectedTrip.startInstant andDate:location.foundDate];
+        
+        if(interval.length > 0)
+            interval = [NSString stringWithFormat:@", %@",interval];
         
         if((location != nil) && (location.subtitle != nil) && [location.subtitle isKindOfClass:[NSString class]]){        
-            NSString *formattedSubtitle = [location.subtitle stringByReplacingOccurrencesOfString:@"\n"
-                                                                        withString:@", "];
-            output = [output stringByAppendingFormat:@"%i. %@ (%@)\n",i+1,formattedSubtitle,location.time];
+            NSString *formattedSubtitle = [location.subtitle stringByReplacingOccurrencesOfString:@"\n" withString:@", "];
+            
+            output = [output stringByAppendingFormat:@"%i. %@ (%@%@)\n",i+1,formattedSubtitle,location.time,interval];
+            
             if(location.userNote.length > 0)
                 output = [output stringByAppendingFormat:@" -- %@\n\n",location.userNote];
         }
     }
+    return output;
+}
+
+
+
+- (NSString *)formattedIntervalSinceStart:(NSDate *)startDate andDate:(NSDate *)endDate
+{
+    if((endDate == nil) || (startDate == nil))
+        return @"";
+    NSTimeInterval interval = [endDate timeIntervalSinceDate:startDate];
+    int hours = floor(interval/3600);
+    int minutes = floor((interval-(hours*3600))/60);
+    int seconds = round(interval - minutes * 60);
+    NSString *output = [NSString stringWithFormat:@"%02d:%02d:%02d",hours,minutes,seconds];
     return output;
 }
 
@@ -739,7 +761,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         
         summaryBody.text = [self tripSummary:selectedTrip];
         summaryTitle.text = selectedTrip.tripName;
-        summaryRight.text = [self currentDate];
+        summaryRight.text = [selectedTrip dateRangeString];
         summarySubTitle.text = [self tripNumPoints:selectedTrip];
         
         summaryView.alpha = 1;   
@@ -775,6 +797,16 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         
         [UIView commitAnimations];
     }
+}
+
+- (IBAction)switchLogDataChanged:(id)sender {
+    self.selectedTrip.logData = switchLogData.on;
+    
+    //Turn on monitoring if set to ON.  Turn it off otherwise.
+    if(self.selectedTrip.logData)
+        [self startMonitoringLocation];
+    else
+        [self stopMonitoringLocation];
 }
 
 - (void)openConfig
@@ -891,6 +923,8 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     summarySubTitle = nil;
     [MapTypeValue release];
     MapTypeValue = nil;
+    [switchLogData release];
+    switchLogData = nil;
     [super viewDidUnload];
 
 }

@@ -45,6 +45,7 @@
     IBOutlet UITextView *summaryBody;
     IBOutlet UILabel *summarySubTitle;
     IBOutlet UISegmentedControl *MapTypeValue;
+    IBOutlet UISwitch *switchLogData;
     
     //Defaults
     bool allowBackgroundUpdates;
@@ -64,6 +65,7 @@
 
 - (IBAction)btnZoom:(id)sender;
 - (IBAction)btnToggleText:(id)sender;
+- (IBAction)switchLogDataChanged:(id)sender;
 @property (retain, nonatomic) IBOutlet MKMapView *mapView;
 @property (nonatomic, retain) CoreLocationController *CLController;
 @property (nonatomic, retain) CLGeocoder *reverseGeo;

@@ -65,10 +65,13 @@
     for (NSUInteger i = 0; i < count; i++) {
         Trip *trip = [trips objectAtIndex:i];
         if(trip != nil){
-            if([trip fileName] != nil){                
+            if([trip fileName] != nil){   
+                if(trip.startInstant == nil)
+                    trip.startInstant = [NSDate date];
                 NSDictionary *tripInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
                                           [trip tripName],@"tripName",
                                           [trip fileName],@"fileName", 
+                                          [trip startInstant],@"startInstant",
                                           nil];
                 [plistArr addObject:tripInfo];
             }
@@ -107,6 +110,12 @@
         NSString *tripName = [tripInfo objectForKey:@"tripName"];
         NSString *fileName = [tripInfo objectForKey:@"fileName"];
         
+        NSNumber *logDataNum = [NSNumber numberWithBool:YES];
+        if([tripInfo objectForKey:@"logData"] != nil)
+            logDataNum = (NSNumber *)[tripInfo objectForKey:@"logData"];
+        
+        NSDate *startInstant = [tripInfo objectForKey:@"startInstant"];
+        
         //Build trip, add to trips list and add to table view list
         if(fileName != nil){
             Trip *newTrip = [[Trip alloc] init];
@@ -114,6 +123,9 @@
             newTrip.fileName = fileName;
             NSMutableArray *newLocations = [[NSMutableArray alloc] init];
             newTrip.locations = newLocations;
+            [newTrip setLogDataWithNum:logDataNum];
+            if(startInstant != nil)
+                newTrip.startInstant = startInstant;
             [trips addObject:newTrip];
             [listOfItems addObject:tripName];
         }
@@ -279,15 +291,35 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     for (NSUInteger i = 0; i < count; i++) {
         MyLocation *location = [locations objectAtIndex:i];
         if(location != nil){
-            if([location coordName] != nil){      
-                NSDictionary *coord = [[NSDictionary alloc] initWithObjectsAndKeys:
-                                       [location title],@"name",
-                                       [location address],@"address",
-                                       [location latStr],@"latitude",
-                                       [location longStr],@"longitude", 
-                                       [location time],@"time",
-                                       [location userNote],@"userNote",
-                                       nil];
+            if([location coordName] != nil){   
+                NSDictionary *coord;
+                if(location.userNote == nil)
+                    location.userNote = @"";
+                if((location.datePopulated.boolValue) && [location.foundDate isKindOfClass:[NSDate class]])
+                {
+                    coord = [[NSDictionary alloc] initWithObjectsAndKeys:
+                       [location title],@"name",
+                       [location address],@"address",
+                       [location latStr],@"latitude",
+                       [location longStr],@"longitude", 
+                       [location time],@"time",
+                       [location userNote],@"userNote",
+                       [location datePopulated],@"datePopulated",
+                       [location foundDate],@"foundDate",
+                       nil];
+                }
+                else 
+                {
+                   coord = [[NSDictionary alloc] initWithObjectsAndKeys:
+                       [location title],@"name",
+                       [location address],@"address",
+                       [location latStr],@"latitude",
+                       [location longStr],@"longitude", 
+                       [location time],@"time",
+                       [location userNote],@"userNote",
+                       [location datePopulated],@"datePopulated",
+                       nil];
+                }
                 [plistArr addObject:coord];
             }
         }
@@ -347,6 +379,9 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         NSString *address = [coord objectForKey:@"address"];
         NSString *time = [coord objectForKey:@"time"];
         NSString *userNote = [coord objectForKey:@"userNote"];
+        //NSNumber *intervalSinceTripStart = [coord objectForKey:@"intervalSinceTripStart"];
+        NSDate *foundDate = [coord objectForKey:@"foundDate"];
+        NSNumber *datePopulated = [coord objectForKey:@"datePopulated"];
         
         //Build annotation and add to _mapView
         if((latitude != nil) && (latitude != nil)){
@@ -357,6 +392,9 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
             if(userNote == nil)
                 userNote = @"";
             [location setUserNote:userNote];
+            if(datePopulated.boolValue)
+                location.foundDate = foundDate;
+            location.datePopulated = datePopulated;
             [selectedTrip addLocation:location];
         }
     }  

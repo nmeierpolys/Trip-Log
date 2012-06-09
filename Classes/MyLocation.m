@@ -12,20 +12,23 @@
 @synthesize name = _name;
 @synthesize address = _address;
 @synthesize coordinate = _coordinate;
-@synthesize foundDate;
+@synthesize foundDate = _foundDate;
 @synthesize time;
 @synthesize userNote = _userNote;
 @synthesize index = _index;
+@synthesize intervalSinceTripStart = _intervalSinceTripStart;
+@synthesize datePopulated = _datePopulated;
 
 - (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate index:(int)newIndex{
     if ((self = [super init])) {
         _name = [name copy];
         _address = [address copy];
         _coordinate = coordinate;
-        foundDate = [NSDate date];
+        self.foundDate = [NSDate date];
         time = @"";
         userNote = @"";
         _index = newIndex;
+        self.datePopulated = [NSNumber numberWithBool:YES];
     }
     return self;
 }
@@ -35,10 +38,11 @@
         _name = [name copy];
         _address = [address copy];
         _coordinate = coordinate;
-        foundDate = [NSDate date];
+        self.foundDate = [NSDate date];
         self.time = timeIn;
         userNote = @"";
         _index = newIndex;
+        self.datePopulated = [NSNumber numberWithBool:YES];
     }
     return self;
 }
@@ -53,11 +57,12 @@
             userNote = @"";
         NSNumber *indexNum = (NSNumber *)[dictionary objectForKey:@"index"];
         _index = [indexNum intValue];
+        self.datePopulated = [NSNumber numberWithBool:YES];
     }
     [self setLat:[dictionary objectForKey:@"latitude"]];
     [self setLong:[dictionary objectForKey:@"longitude"]];
     
-    foundDate = [NSDate date];
+    self.foundDate = [NSDate date];
      
     return self;
 }
@@ -111,6 +116,19 @@
     [subtitle retain];
     _address = subtitle;
 }
+
+//- (NSNumber *)getIntervalSinceTripStartNum
+//{
+//    return [NSNumber numberWithDouble:self.intervalSinceTripStart];
+//}
+//
+//- (void)setIntervalSinceTripStart:(NSNumber *)numToSet
+//{
+//    //if(numToSet == nil)
+//        self.intervalSinceTripStart = 0;
+//    //self.intervalSinceTripStart = [numToSet doubleValue];
+//    
+//}
 
 - (void)dealloc
 {

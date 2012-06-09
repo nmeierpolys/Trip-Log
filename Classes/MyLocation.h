@@ -17,15 +17,19 @@
     NSString *time;
     NSString *userNote;
     int index;
+    NSTimeInterval intervalSinceTripStart;
+    NSNumber *datePopulated;
 }
 
 @property (copy) NSString *name;
 @property (copy) NSString *address;
 @property (copy) NSString *time;
 @property (nonatomic, readonly) CLLocationCoordinate2D coordinate;
-@property (nonatomic, readonly) NSDate *foundDate;
+@property (copy) NSDate *foundDate;
 @property (copy) NSString *userNote;
 @property int index;
+@property NSTimeInterval intervalSinceTripStart;
+@property (copy) NSNumber *datePopulated;
 
 - (id)initWithName:(NSString*)name address:(NSString*)address coordinate:(CLLocationCoordinate2D)coordinate index:(int)newIndex;
 
@@ -42,5 +46,7 @@
 - (void)setLat:(NSString *)latStr;
 - (void)setLong:(NSString *)longStr;
 - (void)setSubtitle:(NSString *)subtitle;
+- (NSNumber *)getIntervalSinceTripStartNum;
+- (void)setIntervalSinceTripStartNum:(NSNumber *)numToSet;
 
 @end

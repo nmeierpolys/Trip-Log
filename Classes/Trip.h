@@ -15,6 +15,8 @@
     NSString *fileName;
     double cumulativeDistance;
     double directDistance;
+    bool logData;
+    NSDate *startInstant;
 }
 
 @property (retain, nonatomic) NSMutableArray *locations;
@@ -22,6 +24,8 @@
 @property (retain, nonatomic) NSString *fileName;
 @property double cumulativeDistance;
 @property double directDistance;
+@property bool logData;
+@property (copy) NSDate *startInstant;
 
 - (void)addLocation:(MyLocation *)location;
 - (void)clearLocations;
@@ -36,4 +40,8 @@
 - (NSString *)cumulativeDistanceAutoformatted;
 - (NSString *)directDistanceAutoformatted;
 - (int)appropriateUnitForDistance:(int)distance;
+- (NSNumber *)getLogDataNumber;
+- (void)setLogDataWithNum:(NSNumber *)logDataNum;
+- (NSTimeInterval)intervalSinceStart;
+- (NSString *)dateRangeString;
 @end

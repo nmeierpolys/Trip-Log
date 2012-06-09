@@ -29,8 +29,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
     //Start Flurry session
-    //[FlurryAnalytics startSession:@"8ESZMG4HR6K4A4IMIEP5"];  //Testing
-    [FlurryAnalytics startSession:@"TDS9SNISF6JL6BSBU77K"];  //Release
+    [FlurryAnalytics startSession:@"8ESZMG4HR6K4A4IMIEP5"];  //Testing
+    //[FlurryAnalytics startSession:@"TDS9SNISF6JL6BSBU77K"];  //Release
     
     //Testing: 8ESZMG4HR6K4A4IMIEP5
     //Release: TDS9SNISF6JL6BSBU77K
