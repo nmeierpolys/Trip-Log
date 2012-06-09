@@ -52,7 +52,7 @@
 - (void)saveTripListToPlist{
     //Plist path
 	
-    NSString *plistFile = @"TripLogTrips";
+    NSString *plistFile = @"TripLogFreeTrips";
     
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:plistFile];
@@ -91,7 +91,7 @@
     //Plist document path
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     
-    NSString *plistFile = @"TripLogTrips";
+    NSString *plistFile = @"TripLogFreeTrips";
     
     NSString *plistPath = [documentsDirectory stringByAppendingPathComponent:plistFile];
 	

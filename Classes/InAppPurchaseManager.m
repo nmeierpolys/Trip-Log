@@ -8,13 +8,16 @@
 
 #import "InAppPurchaseManager.h"
 
-#define kInAppPurchaseProUpgradeProductId @"com.thanscorner.triplog.TripLogUpgrade"
+#define kInAppPurchaseProUpgradeProductId @"com.thanscorner.triplogfree.TripLogUpgrade"
 
 @implementation InAppPurchaseManager
 
 - (void)requestProUpgradeProductData
 {
     NSSet *productIdentifiers = [NSSet setWithObject:@"com.thanscorner.triplogfree.TripLogUpgrade" ];
+    productIdentifiers = [productIdentifiers setByAddingObject:@"com.thanscorner.triplogfree.1234"];
+    productIdentifiers = [productIdentifiers setByAddingObject:@"com.thanscorner.triplogfree.test1"];
+    
     productsRequest = [[[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers] retain];
     productsRequest.delegate = self;
     [productsRequest start];
@@ -28,13 +31,19 @@
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
 {
     NSArray *products = response.products;
-    proUpgradeProduct = [products count] == 1 ? [[products firstObject] retain] : nil;
+    proUpgradeProduct = [products count] > 0 ? [[products firstObject] retain] : nil;
     if (proUpgradeProduct)
     {
         NSLog(@"Product title: %@" , proUpgradeProduct.localizedTitle);
         NSLog(@"Product description: %@" , proUpgradeProduct.localizedDescription);
         NSLog(@"Product price: %@" , proUpgradeProduct.price);
         NSLog(@"Product id: %@" , proUpgradeProduct.productIdentifier);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"It worked"
+                                                        message:proUpgradeProduct.localizedTitle
+                                                       delegate:self 
+                                              cancelButtonTitle:@"OK" 
+                                              otherButtonTitles: nil];
+        [alert show];
     }
     
     for (NSString *invalidProductId in response.invalidProductIdentifiers)

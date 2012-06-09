@@ -37,6 +37,8 @@
     
     NSDate *lastUpdate;
     NSDate *idleTime;
+    NSDate *nextValidPointTime;
+    NSDate *baseInstant;
     
     //Outlets
     IBOutlet UIView *summaryView;
@@ -58,6 +60,8 @@
     
     //InAppSettings view
     IASKAppSettingsViewController *appSettingsViewController;
+                                                        
+                                            
 }
 
 
@@ -81,6 +85,8 @@
 @property (nonatomic, retain)
     NSMutableArray *addresses;
 @property (nonatomic, retain) IASKAppSettingsViewController *appSettingsViewController;
+@property (nonatomic, retain) NSDate *nextValidPointTime;
+@property (nonatomic, retain) NSDate *baseInstant;
 - (void)zoomView:(double) zoomLevelLocal;
 - (void)loadAnnotationsToMap;
 - (void)saveInfo;
@@ -100,5 +106,6 @@
 - (void)loadDefaults;
 - (void)stopMonitoringLocation;
 - (void)startMonitoringLocation;
+- (void)updateValidPointTimeWithNextValidTime;
 
 @end
