@@ -30,6 +30,8 @@
 @synthesize addresses;
 @synthesize appSettingsViewController;
 @synthesize route;
+@synthesize nextValidPointTime;
+@synthesize baseInstant;
 
 - (IASKAppSettingsViewController*)appSettingsViewController {
 	if (!appSettingsViewController) {
@@ -108,7 +110,31 @@
     updateInterval = [[defaults stringForKey:@"updateInterval"] doubleValue];
     showRouteLines = [defaults boolForKey:@"showRouteLines"];
     showPins = [defaults boolForKey:@"showPins"];
+    
+    //Reset baseInstant date as current date
+    self.baseInstant = [NSDate date];
+    self.nextValidPointTime = self.baseInstant;
 }
+
+- (double)numSecondsBetweenStartDate:(NSDate *)start andEndDate:(NSDate *)end
+{
+    if((start == nil) || (end == nil))
+        return 0;
+    return (double)[end timeIntervalSinceDate:start];
+}
+
+
+//Divide all time into blocks of the user-defined interval.  
+//Find start of the next block.
+- (void)updateValidPointTimeWithNextValidTime
+{
+    NSTimeInterval timeDiff = -[self numSecondsBetweenStartDate:[NSDate date] andEndDate:self.baseInstant];
+    double diffFromThisIntervalAndExpected = fmod(timeDiff, updateInterval);
+    
+    NSTimeInterval intervalForNextPoint = timeDiff - diffFromThisIntervalAndExpected + updateInterval;
+    self.nextValidPointTime = [self.baseInstant dateByAddingTimeInterval:intervalForNextPoint];
+}
+
 
 - (void)viewDidDisappear:(BOOL)animated{
     [self stopMonitoringLocation];
@@ -226,6 +252,8 @@
 }
 
 - (void)locationUpdate:(CLLocation *)location {
+    if(![self allowUpdate])
+        return;
     
     if(location == nil)
         return;
@@ -490,8 +518,11 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
             if(showPins)
                 [_mapView addAnnotation:tempAnnotation];    
             
-            summaryBody.text = [self tripSummary:selectedTrip];
-            summarySubTitle.text = [self tripNumPoints:selectedTrip];
+            if(summaryBody.alpha > 0)
+            {
+                summaryBody.text = [self tripSummary:selectedTrip];
+                summarySubTitle.text = [self tripNumPoints:selectedTrip];
+            }
             [self drawRouteLines];
         }
         else
@@ -505,8 +536,11 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
             if(showPins)
                 [_mapView addAnnotation:tempAnnotation];
             
-            summaryBody.text = [self tripSummary:selectedTrip];
-            summarySubTitle.text = [self tripNumPoints:selectedTrip];
+            if(summaryBody.alpha > 0)
+            {
+                summaryBody.text = [self tripSummary:selectedTrip];
+                summarySubTitle.text = [self tripNumPoints:selectedTrip];
+            }
             [self drawRouteLines];
         
         }
@@ -657,7 +691,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     NSTimeInterval interval = [endDate timeIntervalSinceDate:startDate];
     int hours = floor(interval/3600);
     int minutes = floor((interval-(hours*3600))/60);
-    int seconds = round(interval - minutes * 60);
+    int seconds = round(interval - (hours *3600) - (minutes * 60));
     NSString *output = [NSString stringWithFormat:@"%02d:%02d:%02d",hours,minutes,seconds];
     return output;
 }
@@ -739,20 +773,21 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 }
 
 - (bool)allowUpdate {
-    if(selectedTrip.locations.count < 1){
+    if(selectedTrip.locations.count < 1)
+    {
         lastUpdate = [[NSDate alloc] initWithTimeIntervalSinceNow:0];  
+        [self updateValidPointTimeWithNextValidTime];
         return true;
     }
     
-    NSDate *currentTime = [NSDate date];
-    NSTimeInterval secondsSinceUpdate = [currentTime timeIntervalSinceDate:lastUpdate];
-    
-    if(secondsSinceUpdate >= updateInterval){
-        lastUpdate = [[NSDate alloc] initWithTimeIntervalSinceNow:0];  
+    //Now, we just care if CurrentDate > nextVAlidPointTime
+    if([self.nextValidPointTime timeIntervalSinceNow] < 0)
+    {
+        [self updateValidPointTimeWithNextValidTime];
         return true;
-    } else {
-        return false;
     }
+    
+    return false;
 }
 
 - (IBAction)btnToggleText:(id)sender {
@@ -804,9 +839,14 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     
     //Turn on monitoring if set to ON.  Turn it off otherwise.
     if(self.selectedTrip.logData)
+    {
+        [self loadDefaults];
         [self startMonitoringLocation];
+    }
     else
+    {
         [self stopMonitoringLocation];
+    }
 }
 
 - (void)openConfig
