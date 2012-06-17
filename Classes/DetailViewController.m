@@ -257,9 +257,9 @@
     
     if(location == nil)
         return;
-    
-    if((previousLat == location.coordinate.latitude) && 
-       (previousLong == location.coordinate.longitude))
+        
+    if((fabsf(previousLat - location.coordinate.latitude) < .00001) &&
+       (fabsf(previousLong - location.coordinate.longitude) < .00001))
         return;
     
     [_mapView setCenterCoordinate:location.coordinate];
