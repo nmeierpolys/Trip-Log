@@ -44,6 +44,9 @@
     
     updatedRow = -1;
     updatedTrip = nil;
+    
+    bool isProUpgradePurchased = [[NSUserDefaults standardUserDefaults] boolForKey:@"isProUpgradePurchased"];
+    NSLog(@"IsProUpgradePurchased: %i",isProUpgradePurchased);
 } 
 
 - (void) viewDidDisappear:(BOOL)animated{
@@ -171,6 +174,7 @@
 
 - (void)ShowAddTripDialog
 {
+    NSLog(@"showAddTripDialog");
     TSAlertView* av = [[[TSAlertView alloc] init] autorelease];
     av.title = @"Trip name:";
     av.message = @"";
@@ -188,16 +192,25 @@
 
 - (void)GetUpgradeOrFailAddTrip
 {
+    [FlurryAnalytics logEvent:@"triedUpgradeAndBailed"];
+    NSLog(@"GetUpgradeOrFAilAddTrip");
     if(inAppPurchaseManager == nil)
+    {
         inAppPurchaseManager = [[InAppPurchaseManager alloc] init];
+        [inAppPurchaseManager loadStore];
+    }
     
-    [inAppPurchaseManager requestProUpgradeProductData];
-    [inAppPurchaseManager loadStore];
+    if([inAppPurchaseManager canMakePurchases])
+    {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Upgrade to My Trip Log Pro" message:@"Upgrade to the Pro version for $.99 to create additional trips." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Upgrade",nil];
+        [alertView show];
+    }
 }
 
 - (void) addButtonTap
 {
     
+    NSLog(@"addButtonTap");
     bool isProUpgradePurchased = [[NSUserDefaults standardUserDefaults] boolForKey:@"isProUpgradePurchased"];
     
     //Need to check license when user has more than one trip and 
@@ -206,15 +219,6 @@
     {
         //Give option to purchase upgrade
         [self GetUpgradeOrFailAddTrip];
-        
-        isProUpgradePurchased = [[NSUserDefaults standardUserDefaults] boolForKey:@"isProUpgradePurchased"];
-        if(isProUpgradePurchased)
-        {
-            
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Successfully upgraded to Trip Log Pro." message:@"Go wild and create as many trips as you'd like" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            
-            [alertView show];
-        }
     }
     else 
     {
@@ -226,18 +230,68 @@
 
 }
 
-// after animation
-- (void) alertView: (TSAlertView *) alertView 
-didDismissWithButtonIndex: (NSInteger) buttonIndex
+- (void)productPurchased:(NSNotification *)notification 
 {
-    // cancel
-    if( buttonIndex == 1 )
-        return;
     
-    NSString *tripName = alertView.inputTextField.text;
+    NSLog(@"productPurchased");
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
     
-    if([tripName length] >=1){
-        [self addNew:alertView.inputTextField.text];
+    NSString *productIdentifier = (NSString *) notification.object;
+    NSLog(@"Purchased: %@", productIdentifier); 
+    
+    bool isProUpgradePurchased = [[NSUserDefaults standardUserDefaults] boolForKey:@"isProUpgradePurchased"];
+    if(isProUpgradePurchased)
+    {
+        [FlurryAnalytics logEvent:@"upgradePurchased"];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Successfully upgraded to Trip Log Pro." message:@"Go wild and create as many trips as you'd like" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        
+        [alertView show];
+    }
+    
+}
+
+- (void)productPurchaseFailed:(NSNotification *)notification 
+{
+    [FlurryAnalytics logEvent:@"upgradePurchaseFailed"];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Upgrade failed" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alertView show];
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    
+}
+
+// after animation
+- (void) alertView: (TSAlertView *) alertView didDismissWithButtonIndex: (NSInteger) buttonIndex
+{
+    NSLog(@"alertView:didDismissWithButtonIndex - %@",alertView.title);
+    if([alertView.title isEqualToString:@"Upgrade to My Trip Log Pro"])
+    {
+        if( buttonIndex == 0 )
+            return;
+        else 
+        {
+            NSLog(@"Time to upgrade");
+            [inAppPurchaseManager purchaseProUpgrade];
+        }
+    }
+    else if([alertView.title isEqualToString:@"Successfully upgraded to Trip Log Pro."])
+    {
+        //Do nothing here
+    }
+    else if([alertView.title isEqualToString:@"Upgrade failed"])
+    {
+        //Do nothing here
+    }
+    else
+    {
+        // cancel
+        if( buttonIndex == 1 )
+            return;
+        
+        NSString *tripName = alertView.inputTextField.text;
+        
+        if([tripName length] >=1){
+            [self addNew:alertView.inputTextField.text];
+        }
     }
 }
 
@@ -442,6 +496,9 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 
 
 - (void)viewWillAppear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:kInAppPurchaseManagerTransactionSucceededNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector: @selector(productPurchaseFailed:) name:kInAppPurchaseManagerTransactionFailedNotification object: nil];
+    
     [super viewWillAppear:animated];
     [self.tableView reloadData];
 }

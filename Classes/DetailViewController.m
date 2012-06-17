@@ -90,6 +90,9 @@
     zoomLevel = 1;
     
     [self drawRouteLines];
+    if(self.selectedTrip.locations.count < 1)
+        self.selectedTrip.logData = YES;
+    
     switchLogData.on = self.selectedTrip.logData;
     
     if(self.selectedTrip.logData)
@@ -252,14 +255,15 @@
 }
 
 - (void)locationUpdate:(CLLocation *)location {
-    if(![self allowUpdate])
-        return;
     
     if(location == nil)
         return;
     
-    if((previousLat == location.coordinate.latitude) && 
-       (previousLong == location.coordinate.longitude))
+    if(![self allowUpdate])
+        return;
+    
+    if((fabsf(previousLat - location.coordinate.latitude) < .00001) &&
+       (fabsf(previousLong - location.coordinate.longitude) < .00001))
         return;
     
     [_mapView setCenterCoordinate:location.coordinate];
