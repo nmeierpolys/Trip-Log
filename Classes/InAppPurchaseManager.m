@@ -7,6 +7,7 @@
 //
 
 #import "InAppPurchaseManager.h"
+#import "FlurryAnalytics.h"
 
 #define kInAppPurchaseProUpgradeProductId @"TripLogUpgrade"
 
@@ -14,7 +15,6 @@
 
 - (void)requestProUpgradeProductData
 {
-    NSLog(@"requestProUpgradeProductData");
     NSSet *productIdentifiers = [NSSet setWithObject:@"TripLogUpgrade" ];
     
     productsRequest = [[[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers] retain];
@@ -29,19 +29,20 @@
 
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
 {
-    NSLog(@"productsRequest");
     NSArray *products = response.products;
     proUpgradeProduct = [products count] > 0 ? [[products firstObject] retain] : nil;
-    if (proUpgradeProduct)
-    {
-        NSLog(@"Product title: %@" , proUpgradeProduct.localizedTitle);
-        NSLog(@"Product description: %@" , proUpgradeProduct.localizedDescription);
-        NSLog(@"Product price: %@" , proUpgradeProduct.price);
-        NSLog(@"Product id: %@" , proUpgradeProduct.productIdentifier);
-    }
+//    if (proUpgradeProduct)
+//    {
+//        NSLog(@"Product title: %@" , proUpgradeProduct.localizedTitle);
+//        NSLog(@"Product description: %@" , proUpgradeProduct.localizedDescription);
+//        NSLog(@"Product price: %@" , proUpgradeProduct.price);
+//        NSLog(@"Product id: %@" , proUpgradeProduct.productIdentifier);
+//    }
     
     for (NSString *invalidProductId in response.invalidProductIdentifiers)
     {
+        NSDictionary *invalidIDDict = [NSDictionary dictionaryWithObject:invalidProductId forKey:@"invalidID"];
+        [FlurryAnalytics logEvent:@"InvalidProductID" withParameters:invalidProductId];
         NSLog(@"Invalid product id: %@" , invalidProductId);
     }
     
@@ -60,7 +61,6 @@
 //
 - (void)loadStore
 {
-    NSLog(@"loadStore");
     // restarts any purchases if they were interrupted last time the app was open
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     
@@ -73,7 +73,6 @@
 //
 - (BOOL)canMakePurchases
 {
-    NSLog(@"canMakePurchases");
     return [SKPaymentQueue canMakePayments];
 }
 
@@ -82,7 +81,6 @@
 //
 - (void)purchaseProUpgrade
 {
-    NSLog(@"purchaseProUpgrade");
     SKPayment *payment = [SKPayment paymentWithProductIdentifier:kInAppPurchaseProUpgradeProductId];
     [[SKPaymentQueue defaultQueue] addPayment:payment];
 }
@@ -95,7 +93,6 @@
 //
 - (void)recordTransaction:(SKPaymentTransaction *)transaction
 {
-    NSLog(@"recordTransaction");
     if ([transaction.payment.productIdentifier isEqualToString:kInAppPurchaseProUpgradeProductId])
     {
         // save the transaction receipt to disk
@@ -109,7 +106,6 @@
 //
 - (void)provideContent:(NSString *)productId
 {
-    NSLog(@"provideContent");
     if ([productId isEqualToString:kInAppPurchaseProUpgradeProductId])
     {
         // enable the pro features
@@ -123,7 +119,6 @@
 //
 - (void)finishTransaction:(SKPaymentTransaction *)transaction wasSuccessful:(BOOL)wasSuccessful
 {
-    NSLog(@"finishTransaction");
     // remove the transaction from the payment queue.
     [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     
@@ -145,7 +140,6 @@
 //
 - (void)completeTransaction:(SKPaymentTransaction *)transaction
 {
-    NSLog(@"completeTransaction");
     [self recordTransaction:transaction];
     [self provideContent:transaction.payment.productIdentifier];
     [self finishTransaction:transaction wasSuccessful:YES];
@@ -156,7 +150,6 @@
 //
 - (void)restoreTransaction:(SKPaymentTransaction *)transaction
 {
-    NSLog(@"restoreTransaction");
     [self recordTransaction:transaction.originalTransaction];
     [self provideContent:transaction.originalTransaction.payment.productIdentifier];
     [self finishTransaction:transaction wasSuccessful:YES];
@@ -167,7 +160,6 @@
 //
 - (void)failedTransaction:(SKPaymentTransaction *)transaction
 {
-    NSLog(@"failedTransaction");
     if (transaction.error.code != SKErrorPaymentCancelled)
     {
         // error!
@@ -188,7 +180,6 @@
 //
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
 {
-    NSLog(@"paymentQueue:updatedTransactions:");
     for (SKPaymentTransaction *transaction in transactions)
     {
         switch (transaction.transactionState)

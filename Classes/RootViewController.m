@@ -15,6 +15,8 @@
 #import "FlurryAnalytics.h"
 #import "InAppPurchaseManager.h"
 
+#define IsFreeVersion YES
+
 @implementation RootViewController
 
 @synthesize trips;
@@ -46,7 +48,6 @@
     updatedTrip = nil;
     
     bool isProUpgradePurchased = [[NSUserDefaults standardUserDefaults] boolForKey:@"isProUpgradePurchased"];
-    NSLog(@"IsProUpgradePurchased: %i",isProUpgradePurchased);
 } 
 
 - (void) viewDidDisappear:(BOOL)animated{
@@ -174,7 +175,6 @@
 
 - (void)ShowAddTripDialog
 {
-    NSLog(@"showAddTripDialog");
     TSAlertView* av = [[[TSAlertView alloc] init] autorelease];
     av.title = @"Trip name:";
     av.message = @"";
@@ -193,7 +193,6 @@
 - (void)GetUpgradeOrFailAddTrip
 {
     [FlurryAnalytics logEvent:@"triedUpgradeAndBailed"];
-    NSLog(@"GetUpgradeOrFAilAddTrip");
     if(inAppPurchaseManager == nil)
     {
         inAppPurchaseManager = [[InAppPurchaseManager alloc] init];
@@ -209,9 +208,18 @@
 
 - (void) addButtonTap
 {
+    bool isProUpgradePurchased = NO;
     
-    NSLog(@"addButtonTap");
-    bool isProUpgradePurchased = [[NSUserDefaults standardUserDefaults] boolForKey:@"isProUpgradePurchased"];
+    //Only check for upgrade if this is the free version (IAP supported)
+    //For paid version, it's always purchased.
+    if(IsFreeVersion)
+    {
+        isProUpgradePurchased = [[NSUserDefaults standardUserDefaults] boolForKey:@"isProUpgradePurchased"];
+    }
+    else 
+    {
+        isProUpgradePurchased = YES;
+    }
     
     //Need to check license when user has more than one trip and 
     //wants to add another
@@ -232,12 +240,9 @@
 
 - (void)productPurchased:(NSNotification *)notification 
 {
-    
-    NSLog(@"productPurchased");
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     
     NSString *productIdentifier = (NSString *) notification.object;
-    NSLog(@"Purchased: %@", productIdentifier); 
     
     bool isProUpgradePurchased = [[NSUserDefaults standardUserDefaults] boolForKey:@"isProUpgradePurchased"];
     if(isProUpgradePurchased)
@@ -262,14 +267,12 @@
 // after animation
 - (void) alertView: (TSAlertView *) alertView didDismissWithButtonIndex: (NSInteger) buttonIndex
 {
-    NSLog(@"alertView:didDismissWithButtonIndex - %@",alertView.title);
     if([alertView.title isEqualToString:@"Upgrade to My Trip Log Pro"])
     {
         if( buttonIndex == 0 )
             return;
         else 
         {
-            NSLog(@"Time to upgrade");
             [inAppPurchaseManager purchaseProUpgrade];
         }
     }
