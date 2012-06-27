@@ -152,6 +152,7 @@
     newTrip.tripName = tripName;
     newTrip.fileName = [NSString stringWithFormat:@"temp%db.plist",i];
     newTrip.locations = newLocations; 
+    newTrip.logData = YES;
     
     //Add trip to trips array
     [trips addObject:newTrip];

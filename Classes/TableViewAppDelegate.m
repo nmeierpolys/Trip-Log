@@ -31,6 +31,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     //Start Flurry session
     [FlurryAnalytics startSession:@"8ESZMG4HR6K4A4IMIEP5"];  //Testing
     //[FlurryAnalytics startSession:@"TDS9SNISF6JL6BSBU77K"];  //Release
+    //[FlurryAnalytics startSession:@"22SMZTDB4GWNXBJJG7KN"];  //Free
     
     //Testing: 8ESZMG4HR6K4A4IMIEP5
     //Release: TDS9SNISF6JL6BSBU77K
@@ -39,18 +40,6 @@ void uncaughtExceptionHandler(NSException *exception) {
     UINavigationController *tmpNavigationController = (UINavigationController *)self.window.rootViewController;
     
     [FlurryAnalytics logAllPageViews:tmpNavigationController];
-    
-    CLLocationManager *locationManager = [[CLLocationManager alloc] init];
-    [locationManager startUpdatingLocation];
-    
-    CLLocation *location = locationManager.location;
-    [locationManager release];
-    
-    //Update Flurry's location for this user
-    [FlurryAnalytics setLatitude:location.coordinate.latitude
-                       longitude:location.coordinate.longitude            
-              horizontalAccuracy:location.horizontalAccuracy            
-                verticalAccuracy:location.verticalAccuracy]; 
     
     // Set the application defaults
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];

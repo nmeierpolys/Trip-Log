@@ -60,12 +60,12 @@
     //Set up delegate for getting map updates
     CLController = [[CoreLocationController alloc] init];
 	CLController.delegate = self;
-    [self startMonitoringLocation];
     
     //Geolocation object
     reverseGeo = [[CLGeocoder alloc] init];
     
     isUpdating = true;
+    needsFlurryUpdate = true;
     
     [summaryView setCenter:CGPointMake(summaryView.center.x, summaryView.center.y +38)];
     
@@ -90,12 +90,9 @@
     zoomLevel = 1;
     
     [self drawRouteLines];
+    if(self.selectedTrip.locations.count < 1)
+        self.selectedTrip.logData = YES;
     switchLogData.on = self.selectedTrip.logData;
-    
-    if(self.selectedTrip.logData)
-        [self startMonitoringLocation];
-    else
-        [self stopMonitoringLocation];
 }
 - (void) loadDefaults {
     [NSUserDefaults resetStandardUserDefaults];
@@ -252,6 +249,25 @@
 }
 
 - (void)locationUpdate:(CLLocation *)location {
+    
+    //Update Flurry user location the first time
+    if(needsFlurryUpdate)
+    {
+        [FlurryAnalytics setLatitude:location.coordinate.latitude
+                           longitude:location.coordinate.longitude            
+                  horizontalAccuracy:location.horizontalAccuracy            
+                    verticalAccuracy:location.verticalAccuracy]; 
+        needsFlurryUpdate = false;
+    }
+    
+    [self loadDefaults];    
+    
+    //Unsubscribe from updates after a certain amount of idle time
+    NSDate *currentTime = [NSDate date];
+    NSTimeInterval interval = [currentTime timeIntervalSinceDate:self.idleTime];
+    if(isInBackground && (!allowBackgroundUpdates || (interval > maxIdleTime)))
+        [self stopMonitoringLocation];
+    
     if(![self allowUpdate])
         return;
     
@@ -793,11 +809,12 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 - (IBAction)btnToggleText:(id)sender {
 
     if(summaryView.alpha == 0){    
-        
-        summaryBody.text = [self tripSummary:selectedTrip];
         summaryTitle.text = selectedTrip.tripName;
         summaryRight.text = [selectedTrip dateRangeString];
         summarySubTitle.text = [self tripNumPoints:selectedTrip];
+        summaryBody.text = [self tripSummary:selectedTrip]; 
+        summaryBody.alpha = 1;
+        summaryBody.userInteractionEnabled = YES;
         
         summaryView.alpha = 1;   
         //Animate in summary view
