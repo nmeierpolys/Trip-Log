@@ -34,6 +34,7 @@
     bool isUpdating;
     bool isInBackground;
     bool changedSettings;
+    bool needsFlurryUpdate;
     
     NSDate *lastUpdate;
     NSDate *idleTime;

@@ -60,12 +60,12 @@
     //Set up delegate for getting map updates
     CLController = [[CoreLocationController alloc] init];
 	CLController.delegate = self;
-    [self startMonitoringLocation];
     
     //Geolocation object
     reverseGeo = [[CLGeocoder alloc] init];
     
     isUpdating = true;
+    needsFlurryUpdate = true;
     
     [summaryView setCenter:CGPointMake(summaryView.center.x, summaryView.center.y +38)];
     
@@ -92,13 +92,7 @@
     [self drawRouteLines];
     if(self.selectedTrip.locations.count < 1)
         self.selectedTrip.logData = YES;
-    
     switchLogData.on = self.selectedTrip.logData;
-    
-    if(self.selectedTrip.logData)
-        [self startMonitoringLocation];
-    else
-        [self stopMonitoringLocation];
 }
 - (void) loadDefaults {
     [NSUserDefaults resetStandardUserDefaults];
@@ -138,11 +132,11 @@
     self.nextValidPointTime = [self.baseInstant dateByAddingTimeInterval:intervalForNextPoint];
 }
 
+
 - (void)viewDidDisappear:(BOOL)animated{
     [self stopMonitoringLocation];
     [self saveInfo];
 }
-
 - (void)viewDidAppear:(BOOL)animated{
     [self loadDefaults];
     
@@ -256,12 +250,30 @@
 
 - (void)locationUpdate:(CLLocation *)location {
     
-    if(location == nil)
-        return;
+    //Update Flurry user location the first time
+    if(needsFlurryUpdate)
+    {
+        [FlurryAnalytics setLatitude:location.coordinate.latitude
+                           longitude:location.coordinate.longitude            
+                  horizontalAccuracy:location.horizontalAccuracy            
+                    verticalAccuracy:location.verticalAccuracy]; 
+        needsFlurryUpdate = false;
+    }
+    
+    [self loadDefaults];    
+    
+    //Unsubscribe from updates after a certain amount of idle time
+    NSDate *currentTime = [NSDate date];
+    NSTimeInterval interval = [currentTime timeIntervalSinceDate:self.idleTime];
+    if(isInBackground && (!allowBackgroundUpdates || (interval > maxIdleTime)))
+        [self stopMonitoringLocation];
     
     if(![self allowUpdate])
         return;
     
+    if(location == nil)
+        return;
+        
     if((fabsf(previousLat - location.coordinate.latitude) < .00001) &&
        (fabsf(previousLong - location.coordinate.longitude) < .00001))
         return;
@@ -695,7 +707,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     NSTimeInterval interval = [endDate timeIntervalSinceDate:startDate];
     int hours = floor(interval/3600);
     int minutes = floor((interval-(hours*3600))/60);
-    int seconds = round(interval - (hours*3600) - (minutes * 60));
+    int seconds = round(interval - (hours *3600) - (minutes * 60));
     NSString *output = [NSString stringWithFormat:@"%02d:%02d:%02d",hours,minutes,seconds];
     return output;
 }
@@ -784,11 +796,6 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         return true;
     }
     
-//    if(self.nextValidPointTime == self.baseInstant)
-//    {
-//        [self updateValidPointTimeWithNextValidTime];
-//        return true;
-//    }
     //Now, we just care if CurrentDate > nextVAlidPointTime
     if([self.nextValidPointTime timeIntervalSinceNow] < 0)
     {
@@ -802,11 +809,12 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 - (IBAction)btnToggleText:(id)sender {
 
     if(summaryView.alpha == 0){    
-        
-        summaryBody.text = [self tripSummary:selectedTrip];
         summaryTitle.text = selectedTrip.tripName;
         summaryRight.text = [selectedTrip dateRangeString];
         summarySubTitle.text = [self tripNumPoints:selectedTrip];
+        summaryBody.text = [self tripSummary:selectedTrip]; 
+        summaryBody.alpha = 1;
+        summaryBody.userInteractionEnabled = YES;
         
         summaryView.alpha = 1;   
         //Animate in summary view

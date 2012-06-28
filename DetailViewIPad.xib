@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="8.00">
 	<data>
 		<int key="IBDocument.SystemTarget">1296</int>
-		<string key="IBDocument.SystemVersion">11D50b</string>
+		<string key="IBDocument.SystemVersion">11E53</string>
 		<string key="IBDocument.InterfaceBuilderVersion">2182</string>
-		<string key="IBDocument.AppKitVersion">1138.32</string>
-		<string key="IBDocument.HIToolboxVersion">568.00</string>
+		<string key="IBDocument.AppKitVersion">1138.47</string>
+		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">1179</string>
@@ -14,8 +14,8 @@
 			<string>IBProxyObject</string>
 			<string>IBUIBarButtonItem</string>
 			<string>IBUILabel</string>
-			<string>IBUIToolbar</string>
 			<string>IBUISwitch</string>
+			<string>IBUIToolbar</string>
 			<string>IBMKMapView</string>
 			<string>IBUITextView</string>
 			<string>IBUISegmentedControl</string>
@@ -47,7 +47,7 @@
 						<string key="NSFrame">{{-7, 0}, {775, 960}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView" ref="504734316"/>
+						<reference key="NSNextKeyView" ref="350790831"/>
 						<string key="NSReuseIdentifierKey">_NS:800</string>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<bool key="IBUIMultipleTouchEnabled">YES</bool>
@@ -105,7 +105,7 @@
 								<string key="NSFrame">{{665, 48}, {83, 21}}</string>
 								<reference key="NSSuperview" ref="310550346"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="218353643"/>
+								<reference key="NSNextKeyView" ref="420657186"/>
 								<string key="NSReuseIdentifierKey">_NS:328</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -155,7 +155,7 @@
 								<string key="NSFrame">{{12, 77}, {745, 276}}</string>
 								<reference key="NSSuperview" ref="310550346"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView" ref="420657186"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:639</string>
 								<reference key="IBUIBackgroundColor" ref="502066005"/>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -202,6 +202,7 @@
 								<string key="NSFrame">{{305, 8}, {158, 30}}</string>
 								<reference key="NSSuperview" ref="420657186"/>
 								<reference key="NSWindow"/>
+								<reference key="NSNextKeyView" ref="218353643"/>
 								<string key="NSReuseIdentifierKey">_NS:273</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
@@ -312,6 +313,7 @@
 						<string key="NSFrame">{{669, 20}, {94, 27}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
+						<reference key="NSNextKeyView" ref="504734316"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<float key="IBUIAlpha">0.5</float>
@@ -398,19 +400,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">MapTypeValue</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="809613460"/>
-					</object>
-					<int key="connectionID">30</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">switchLogData</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="350790831"/>
 					</object>
 					<int key="connectionID">35</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">MapTypeValue</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="809613460"/>
+					</object>
+					<int key="connectionID">30</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
@@ -523,6 +525,16 @@
 						<reference key="parent" ref="191373211"/>
 					</object>
 					<object class="IBObjectRecord">
+						<int key="objectID">33</int>
+						<reference key="object" ref="504734316"/>
+						<reference key="parent" ref="191373211"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">34</int>
+						<reference key="object" ref="350790831"/>
+						<reference key="parent" ref="191373211"/>
+					</object>
+					<object class="IBObjectRecord">
 						<int key="objectID">5</int>
 						<reference key="object" ref="420657186"/>
 						<array class="NSMutableArray" key="children">
@@ -566,16 +578,6 @@
 						<int key="objectID">6</int>
 						<reference key="object" ref="1038941012"/>
 						<reference key="parent" ref="420657186"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">33</int>
-						<reference key="object" ref="504734316"/>
-						<reference key="parent" ref="191373211"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">34</int>
-						<reference key="object" ref="350790831"/>
-						<reference key="parent" ref="191373211"/>
 					</object>
 				</array>
 			</object>
