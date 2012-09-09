@@ -102,7 +102,7 @@
 - (bool)allowUpdate;
 - (void)enteringBackground;
 - (void)enteringForeground;
-- (void)loadDefaults;
+- (void)loadDefaults:(bool)preserveBaseInstant;
 - (void)stopMonitoringLocation;
 - (void)startMonitoringLocation;
 - (void)updateValidPointTimeWithNextValidTime;
