@@ -81,7 +81,7 @@
     
     showPins = true;
     
-    [self loadDefaults];
+    [self loadDefaults:false];
     
     [self loadAnnotationsToMap];
     
@@ -94,7 +94,7 @@
         self.selectedTrip.logData = YES;
     switchLogData.on = self.selectedTrip.logData;
 }
-- (void) loadDefaults {
+- (void) loadDefaults:(bool)preserveBaseInstant {
     [NSUserDefaults resetStandardUserDefaults];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
@@ -109,8 +109,11 @@
     showPins = [defaults boolForKey:@"showPins"];
     
     //Reset baseInstant date as current date
-    self.baseInstant = [NSDate date];
-    self.nextValidPointTime = self.baseInstant;
+    if(!preserveBaseInstant)
+    {
+        self.baseInstant = [NSDate date];
+        self.nextValidPointTime = self.baseInstant;
+    }
 }
 
 - (double)numSecondsBetweenStartDate:(NSDate *)start andEndDate:(NSDate *)end
@@ -138,7 +141,7 @@
     [self saveInfo];
 }
 - (void)viewDidAppear:(BOOL)animated{
-    [self loadDefaults];
+    [self loadDefaults:false];
     
     if(changedSettings)
     {
@@ -148,7 +151,7 @@
         if(previousShowPins && !showPins)
         {
             for (id annotation in _mapView.annotations) {
-                if (![annotation isKindOfClass:[MKUserLocation class]])
+                if ((![annotation isKindOfClass:[MKUserLocation class]]) && (annotation != nil))
                     [_mapView removeAnnotation:annotation];
             } 
         }
@@ -190,8 +193,8 @@
 }
 - (void)enteringForeground {
     isInBackground = NO;
-    [self loadDefaults];
-    [self startMonitoringLocation];
+    [self loadDefaults:false];
+    [self UpdateLogDataState];
     [self drawRouteLines];
 }
 
@@ -260,7 +263,7 @@
         needsFlurryUpdate = false;
     }
     
-    [self loadDefaults];    
+    [self loadDefaults:true];
     
     //Unsubscribe from updates after a certain amount of idle time
     NSDate *currentTime = [NSDate date];
@@ -362,7 +365,8 @@
         else {
             for(UIView *view in annotationView.subviews)
             {
-                [view removeFromSuperview];
+                if(view != nil)
+                    [view removeFromSuperview];
             }
             
             annotationView.pinColor = MKPinAnnotationColorRed;
@@ -456,7 +460,8 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         
         highlightedLocationObj.userNote = userNote;
         
-        [_mapView removeAnnotation:initialAnnotation];
+        if(initialAnnotation != nil)
+            [_mapView removeAnnotation:initialAnnotation];
         [_mapView addAnnotation:highlightedLocationObj];
             
         //Add note icon or clear previous note icon
@@ -602,7 +607,8 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     
     MKPolyline *newRoute = [MKPolyline polylineWithCoordinates: coordinates count: self.selectedTrip.locations.count];
     [self.mapView addOverlay:newRoute];
-    [self.mapView removeOverlay:route];
+    if(route != nil)
+        [self.mapView removeOverlay:route];
     route = newRoute;
 }
 
@@ -779,7 +785,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     
     //Clear from mapView annotations
     for (id annotation in _mapView.annotations) {
-        if (![annotation isKindOfClass:[MKUserLocation class]])
+        if ((![annotation isKindOfClass:[MKUserLocation class]]) && (annotation != nil))
             [_mapView removeAnnotation:annotation];
     } 
     
@@ -852,12 +858,16 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 }
 
 - (IBAction)switchLogDataChanged:(id)sender {
+    [self UpdateLogDataState];
+}
+
+- (void)UpdateLogDataState {
     self.selectedTrip.logData = switchLogData.on;
     
     //Turn on monitoring if set to ON.  Turn it off otherwise.
     if(self.selectedTrip.logData)
     {
-        [self loadDefaults];
+        [self loadDefaults:false];
         [self startMonitoringLocation];
     }
     else
@@ -905,6 +915,9 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         
         [self presentModalViewController:mailer animated:YES];
         
+        NSArray *arr = [NSArray arrayWithObjects:@"nmeierpolys@gmail.com", nil];
+        [mailer setToRecipients: arr];
+        [mailer setSubject:@"subject message"];
         [mailer release];
     }
     else

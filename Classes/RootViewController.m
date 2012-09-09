@@ -558,8 +558,10 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
         [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject: indexPath] withRowAnimation: UITableViewRowAnimationRight];
-        [listOfItems removeObjectAtIndex:indexPath.row];
-        [trips removeObjectAtIndex:indexPath.row];
+        if(indexPath.row < listOfItems.count)
+            [listOfItems removeObjectAtIndex:indexPath.row];
+        if(indexPath.row < trips.count)
+            [trips removeObjectAtIndex:indexPath.row];
         [self.tableView reloadData];
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {

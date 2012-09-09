@@ -31,12 +31,16 @@
     return self;
 }
 - (void)addLocation:(MyLocation *)location{
+    if((locations == nil) || (location == nil))
+        return;
+    
     [self updateDistancesFromLocation:location];  // Computer distances
     [locations addObject:location];               // Add the location to the trip's locations array
 }
 
 - (void)clearLocations{
-    [locations removeAllObjects];
+    if((locations != nil) && (locations.count > 0))
+        [locations removeAllObjects];
 }
 
 - (void)loadData{

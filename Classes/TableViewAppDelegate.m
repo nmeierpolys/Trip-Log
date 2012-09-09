@@ -29,8 +29,8 @@ void uncaughtExceptionHandler(NSException *exception) {
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
     
     //Start Flurry session
-    [FlurryAnalytics startSession:@"8ESZMG4HR6K4A4IMIEP5"];  //Testing
-    //[FlurryAnalytics startSession:@"TDS9SNISF6JL6BSBU77K"];  //Release
+    //[FlurryAnalytics startSession:@"8ESZMG4HR6K4A4IMIEP5"];  //Testing
+    [FlurryAnalytics startSession:@"TDS9SNISF6JL6BSBU77K"];  //Release
     //[FlurryAnalytics startSession:@"22SMZTDB4GWNXBJJG7KN"];  //Free
     
     //Testing: 8ESZMG4HR6K4A4IMIEP5
@@ -43,16 +43,19 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     // Set the application defaults
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
-                   @"YES",@"allowBackgroundUpdates",
-                   @"",@"defaultEmail",
-                   @"10",@"maxIdleTime",
-                   @"5",@"updateInterval",
-                   @"YES",@"showRouteLines",
-                   @"YES",@"showPins",
-                   nil];
-    [defaults registerDefaults:appDefaults];
-    [defaults synchronize];
+    if(defaults != nil)
+    {
+        NSDictionary *appDefaults = [NSDictionary dictionaryWithObjectsAndKeys:
+                       @"YES",@"allowBackgroundUpdates",
+                       @"",@"defaultEmail",
+                       @"10",@"maxIdleTime",
+                       @"5",@"updateInterval",
+                       @"YES",@"showRouteLines",
+                       @"YES",@"showPins",
+                       nil];
+        [defaults registerDefaults:appDefaults];
+        [defaults synchronize];
+    }
     
 	//SplashScreen *dvController = [[SplashScreen alloc] ssinitWithNibName:@"SplashScreen" bundle:[NSBundle mainBundle]];
     
