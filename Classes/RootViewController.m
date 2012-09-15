@@ -29,7 +29,7 @@
 	
 	//Set the title
 	self.navigationItem.title = @"Trip Log";
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;    
+    self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
     UIBarButtonItem *tempButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(importTap)];
     self.navigationItem.rightBarButtonItem = tempButton;
@@ -487,6 +487,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     cell.detailTextLabel.text = tripSubtitle;
     UIImage * backgroundImage = [[UIImage alloc] initWithContentsOfFile:imageName];
     cell.imageView.image = backgroundImage;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
 }
@@ -528,12 +529,6 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     dvController.parentTable = self;
     
 	[self.navigationController pushViewController:dvController animated:YES];
-}
-
-- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath {
-	
-	//return UITableViewCellAccessoryDetailDisclosureButton;
-	return UITableViewCellAccessoryDisclosureIndicator;
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {

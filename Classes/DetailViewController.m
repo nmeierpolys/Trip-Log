@@ -67,13 +67,21 @@
     isUpdating = true;
     needsFlurryUpdate = true;
     
-    [summaryView setCenter:CGPointMake(summaryView.center.x, summaryView.center.y +38)];
+    //Set up the SummaryView initial location and background image
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    int summaryViewOffset = 0;
+    if(screenRect.size.height == 480)
+        summaryViewOffset = 38;
+    else
+        summaryViewOffset = 125;
+    [summaryView setCenter:CGPointMake(summaryView.center.x, summaryView.center.y + summaryViewOffset)];
     
     NSString* imageName = [[NSBundle mainBundle] pathForResource:@"linen_bg_tile" ofType:@"jpg"];
     UIImage * backgroundImage = [[UIImage alloc] initWithContentsOfFile:imageName];
     summaryView.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
     [backgroundImage release];
     [summaryView setOpaque:NO];
+    
     
     lastUpdate = [[NSDate alloc] initWithTimeIntervalSinceNow:0];   
     

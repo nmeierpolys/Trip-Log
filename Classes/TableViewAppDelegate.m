@@ -66,6 +66,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     //sleep(2000);
     
 	// Configure and show the window
+    [self.window setRootViewController:navigationController];
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
     
