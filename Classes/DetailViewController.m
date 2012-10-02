@@ -146,7 +146,6 @@
 
 - (void)viewDidDisappear:(BOOL)animated{
     [self stopMonitoringLocation];
-    [self saveInfo];
 }
 - (void)viewDidAppear:(BOOL)animated{
     [self loadDefaults:false];
@@ -207,6 +206,7 @@
 }
 
 - (void)stopMonitoringLocation{
+    [self saveInfo];
     [CLController.locMgr stopUpdatingLocation];
 }
 - (void)startMonitoringLocation{
@@ -226,6 +226,7 @@
 }
 
 - (void)didReceiveMemoryWarning {
+    [self saveInfo];
     [super didReceiveMemoryWarning]; // Releases the view if it doesn't have a superview
     // Release anything that's not essential, such as cached data
 }
@@ -923,9 +924,6 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         
         [self presentModalViewController:mailer animated:YES];
         
-        NSArray *arr = [NSArray arrayWithObjects:@"nmeierpolys@gmail.com", nil];
-        [mailer setToRecipients: arr];
-        [mailer setSubject:@"subject message"];
         [mailer release];
     }
     else

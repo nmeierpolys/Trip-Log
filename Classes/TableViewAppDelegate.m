@@ -72,7 +72,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     
     //APIWorker *APIobj = [[APIWorker alloc] init];
     //[APIobj sendIDInfo:@"TripLog"];
-    [Appirater appLaunched:YES];
+    //[Appirater appLaunched:YES];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -85,7 +85,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     
 }
 - (void)applicationWillEnterForeground:(UIApplication *)application {
-    [Appirater appEnteredForeground:YES];
+    //[Appirater appEnteredForeground:YES];
     id testView = navigationController.viewControllers.lastObject;
     if([testView isKindOfClass:[DetailViewController class]])
     {
