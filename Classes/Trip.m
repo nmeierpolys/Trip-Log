@@ -15,6 +15,7 @@
 @synthesize fileName;
 @synthesize cumulativeDistance;
 @synthesize directDistance;
+@synthesize useMetric;
 @synthesize logData;
 @synthesize startInstant = _startInstant;
 
@@ -25,6 +26,7 @@
         locations = locationArr;
         logData = YES;
         startInstant = [NSDate date];
+        useMetric = NO;
     }
     [self computeDistancesOfLocations];
     
@@ -34,7 +36,7 @@
     if((locations == nil) || (location == nil))
         return;
     
-    [self updateDistancesFromLocation:location];  // Computer distances
+    [self updateDistancesFromLocation:location];  // Compute distances
     [locations addObject:location];               // Add the location to the trip's locations array
 }
 
@@ -89,31 +91,58 @@
     return directString;
 }
 
+//Units:
+//  1-Meters
+//  2-Miles
+//  3-Feet
+//  4-Kilometres
 - (int)appropriateUnitForDistance:(int)distance
 {
     int unitToUse = 1;
-    if(distance < 1000)
-        unitToUse = 3;
+    
+    if(useMetric)
+    {
+        if(distance < 1000)
+            unitToUse = 1;
+        else
+            unitToUse = 4;
+    }
     else
-        unitToUse = 2;
+    {
+        if(distance < 1000)
+            unitToUse = 3;
+        else
+            unitToUse = 2;
+    }
     return unitToUse;
 }
 
-- (NSString *)distance:(double)distance formattedWithUnit:(int)unitEnum
+- (NSString *)distance:(double)distance
+     formattedWithUnit:(int)unitEnum
 {
     double convertedDistance = 0;
     NSString *output = nil;
-    if(unitEnum == 1){  //meters
+    
+    if(unitEnum == 1)  //metres
+    {
         convertedDistance = distance;
         output = [NSString stringWithFormat:@"%.0f %@",convertedDistance,@"m"];
-    } else if(unitEnum == 2) {  //miles
-        convertedDistance = distance * 0.000189393939; //mile/ft   //mile/m=>0.000621371192
+    }
+    else if(unitEnum == 2)  //miles
+    {
+        convertedDistance = distance * 0.000621371192; //mile/ft   //mile/m=>0.000621371192
         output = [NSString stringWithFormat:@"%.1f %@",convertedDistance,@"mi"];
-    } else if(unitEnum == 3) {  //feet
+    }
+    else if(unitEnum == 3)  //feet
+    {
         convertedDistance = distance * 3.280840;
         output = [NSString stringWithFormat:@"%.0f %@",convertedDistance,@"ft"];
     }
-
+    else if(unitEnum == 4)  //kilometres
+    {
+        convertedDistance = distance *0.001;
+        output = [NSString stringWithFormat:@"%.1f %@",convertedDistance,@"km"];
+    }
     return output;
 }
 
@@ -173,12 +202,14 @@
     CLLocationDistance baseDistance = [fromLocation distanceFromLocation:toLocation];
     
     double distance;
-    if(unitEnum == 1)  //meters
+    if(unitEnum == 1)  //metres
         distance = baseDistance;
     else if(unitEnum == 2)  //miles
         distance = baseDistance * 0.000621371192;
     else if(unitEnum == 3)  //feet
         distance = baseDistance * 3.280840;
+    else if(unitEnum == 3)  //kilometres
+        distance = baseDistance * 0.001;
     
     //NSString *fromCoord = [NSString stringWithFormat:@"(%f,%f)",fromLocation.coordinate.latitude,fromLocation.coordinate.longitude];
     

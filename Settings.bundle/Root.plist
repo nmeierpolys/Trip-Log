@@ -80,6 +80,26 @@
 			<key>FalseValue</key>
 			<string>NO</string>
 		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>Distance Units</string>
+			<key>Key</key>
+			<string>distanceUnit</string>
+			<key>Titles</key>
+			<array>
+				<string>English</string>
+				<string>Metric</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>0</string>
+				<string>1</string>
+			</array>
+			<key>DefaultValue</key>
+			<string>0</string>
+		</dict>
 	</array>
 	<key>StringsTable</key>
 	<string>Root</string>

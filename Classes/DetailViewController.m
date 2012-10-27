@@ -55,7 +55,21 @@
     
     UIBarButtonItem *btnConfig = [[UIBarButtonItem alloc] initWithImage:gearImage style:UIBarButtonItemStyleBordered target:self action:@selector(openConfig)];
     
-    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:btnMail,btnConfig, nil];
+    CGFloat systemVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if(systemVersion > 4.4)
+        self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:btnMail,btnConfig, nil];
+    else
+    {
+        self.navigationItem.rightBarButtonItem = btnConfig;
+        UIButton *btnMailFloating = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [btnMailFloating addTarget:self action:@selector(openMail) forControlEvents:UIControlEventTouchUpInside];
+        [btnMailFloating setTitle:@"Send" forState:UIControlStateNormal];
+        CGFloat width = self.view.frame.size.width;
+        NSLog(@"%f",width);
+        btnMailFloating.frame = CGRectMake(width-58, 55, 50, 35.0);
+        [btnMailFloating setAlpha:.5];
+        [self.view addSubview:btnMailFloating];
+    }
     
     //Set up delegate for getting map updates
     CLController = [[CoreLocationController alloc] init];
@@ -115,6 +129,20 @@
     updateInterval = [[defaults stringForKey:@"updateInterval"] doubleValue];
     showRouteLines = [defaults boolForKey:@"showRouteLines"];
     showPins = [defaults boolForKey:@"showPins"];
+    distanceUnit = [defaults integerForKey:@"distanceUnit"];
+    if(selectedTrip != nil)
+    {
+        if(distanceUnit == 1)
+            selectedTrip.useMetric = YES;
+        else
+            selectedTrip.useMetric = NO;
+        
+        if(summaryBody.alpha > 0)
+        {
+            summaryBody.text = [self tripSummary:selectedTrip];
+        }
+    }
+    
     
     //Reset baseInstant date as current date
     if(!preserveBaseInstant)
@@ -323,12 +351,14 @@
     CLLocationDistance baseDistance = [fromLocation distanceFromLocation:toLocation];
     
     double distance;
-    if(unitEnum == 1)  //meters
+    if(unitEnum == 1)  //metres
         distance = baseDistance;
     else if(unitEnum == 2)  //miles
         distance = baseDistance * 0.000621371192;
     else if(unitEnum == 3)  //feet
         distance = baseDistance * 3.280840;
+    else if(unitEnum == 4)  //kilometres
+        distance = baseDistance * 0.001;
     
     return distance;
 }

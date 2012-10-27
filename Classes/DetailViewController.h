@@ -58,6 +58,7 @@
     bool showRouteLines;
     bool showPins;
     bool previousShowPins;
+    int distanceUnit;
     
     //InAppSettings view
     IASKAppSettingsViewController *appSettingsViewController;

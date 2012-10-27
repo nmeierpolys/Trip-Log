@@ -15,6 +15,7 @@
     NSString *fileName;
     double cumulativeDistance;
     double directDistance;
+    bool useMetric;
     bool logData;
     NSDate *startInstant;
 }
@@ -24,6 +25,7 @@
 @property (retain, nonatomic) NSString *fileName;
 @property double cumulativeDistance;
 @property double directDistance;
+@property bool useMetric;
 @property bool logData;
 @property (copy) NSDate *startInstant;
 

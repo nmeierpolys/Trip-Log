@@ -52,6 +52,7 @@ void uncaughtExceptionHandler(NSException *exception) {
                        @"5",@"updateInterval",
                        @"YES",@"showRouteLines",
                        @"YES",@"showPins",
+                       @"0",@"distanceUnit",
                        nil];
         [defaults registerDefaults:appDefaults];
         [defaults synchronize];

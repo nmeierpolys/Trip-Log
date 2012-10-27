@@ -617,7 +617,7 @@
 					"\"$(SRCROOT)/../RSS-Reader-App/FlurryAnalytics\"",
 					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = TripLog;
 				PROVISIONING_PROFILE = "68582A0B-DB73-4D3B-B301-149F18330A13";
 				SDKROOT = iphoneos;
@@ -663,7 +663,7 @@
 					"\"$(SRCROOT)/../RSS-Reader-App/FlurryAnalytics\"",
 					"\"$(SRCROOT)/FlurryAnalytics\"",
 				);
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = TripLog;
 				PROVISIONING_PROFILE = "68582A0B-DB73-4D3B-B301-149F18330A13";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "F84BBB12-BB36-4BF5-9955-4EF1E129C58A";
