@@ -19,7 +19,10 @@
 		self.locMgr = [[[CLLocationManager alloc] init] autorelease];
 		self.locMgr.delegate = self;
 	}
-	
+    if([self.locMgr respondsToSelector:@selector(pausesLocationUpdatesAutomatically)])
+    {
+        self.locMgr.pausesLocationUpdatesAutomatically = NO;
+    }
 	return self;
 }
 
@@ -27,6 +30,7 @@
 	if(newLocation == nil){
         return;
     }
+    
     if([self.delegate conformsToProtocol:@protocol(CoreLocationControllerDelegate)]) {
 		[self.delegate locationUpdate:newLocation];
 	}

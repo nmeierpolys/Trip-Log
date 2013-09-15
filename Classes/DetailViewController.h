@@ -59,6 +59,7 @@
     bool showPins;
     bool previousShowPins;
     int distanceUnit;
+    bool centerOnCurrentLocation;
     
     //InAppSettings view
     IASKAppSettingsViewController *appSettingsViewController;

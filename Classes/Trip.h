@@ -36,6 +36,8 @@
 - (void)updateDistancesFromLocation:(MyLocation *)newLocation;
 - (void)computeDistancesOfLocations;
 - (double)distanceBetweenPoints:(MyLocation *)fromPoint toPoint:(MyLocation *)toPoint unitEnum:(int)unitEnum;
+- (void)removeLocation:(MyLocation *)location;
+- (void)updateLocationIndexes;
 - (NSString *)directDistanceWithUnit:(int)unitEnum;
 - (NSString *)cumulativeDistanceWithUnit:(int)unitEnum;
 - (NSString *)distance:(double)distance formattedWithUnit:(int)unitEnum;

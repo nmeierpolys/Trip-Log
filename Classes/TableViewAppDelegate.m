@@ -13,6 +13,7 @@
 #import "APIWorker.h"
 #import "FlurryAnalytics.h"
 #import "Appirater.h"
+#import <Crashlytics/Crashlytics.h>
 
 @implementation TableViewAppDelegate
 
@@ -23,7 +24,7 @@ void uncaughtExceptionHandler(NSException *exception) {
     [FlurryAnalytics logError:@"Uncaught" message:[exception name] exception:exception];
 }
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)options {
     
     //Set up exception handler
     NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
@@ -53,10 +54,18 @@ void uncaughtExceptionHandler(NSException *exception) {
                        @"YES",@"showRouteLines",
                        @"YES",@"showPins",
                        @"0",@"distanceUnit",
+                       @"YES",@"centerOnCurrentLocation",
                        nil];
         [defaults registerDefaults:appDefaults];
         [defaults synchronize];
     }
+    
+    if ([[options valueForKey:UIApplicationLaunchOptionsLocationKey] boolValue]) {
+        NSLog(@"Launched because of location event");
+        [FlurryAnalytics logEvent:@"Launched because of location event"];
+    }
+    
+    [Crashlytics startWithAPIKey:@"7a52c82c4c1b6289860e1978cb6337cb9ca2aebc"];
     
 	//SplashScreen *dvController = [[SplashScreen alloc] ssinitWithNibName:@"SplashScreen" bundle:[NSBundle mainBundle]];
     
@@ -70,6 +79,11 @@ void uncaughtExceptionHandler(NSException *exception) {
     [self.window setRootViewController:navigationController];
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
+    
+    // Show tutorial if needed
+    bool hasViewedTutorialPart1 = [defaults objectForKey:@"hasViewedTutorialPart1"];
+    if(!hasViewedTutorialPart1)
+        [self showTutorialAddTrip];
     
     //APIWorker *APIobj = [[APIWorker alloc] init];
     //[APIobj sendIDInfo:@"TripLog"];
@@ -105,6 +119,58 @@ void uncaughtExceptionHandler(NSException *exception) {
     {
         DetailViewController *detailView = navigationController.viewControllers.lastObject;
         [detailView saveInfo];
+    }
+}
+
+- (void)showTutorialAddTrip {
+    
+    UIImageView *imageView = [[UIImageView alloc]
+                              initWithImage:[UIImage imageNamed:[self getTutorial1ImageName]]];
+    imageView.tag = 111;
+    imageView.alpha = 0.8f;
+    imageView.frame = self.navigationController.view.frame;
+    
+    UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapCloseTutorialAddTrip:)];
+    recognizer.delegate = self;
+    [imageView addGestureRecognizer:recognizer];
+    imageView.userInteractionEnabled =  YES;
+	[window addSubview:imageView];
+}
+
+- (NSString *)getTutorial1ImageName {
+    NSString *imageName = @"Tutorial-1";
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        imageName = [imageName stringByAppendingString:@"-iPad"];
+    }
+    else if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        CGSize result = [[UIScreen mainScreen] bounds].size;
+        if(result.height == 480)
+        {
+            imageName = [imageName stringByAppendingString:@"-iPhone3.5in"];
+        }
+        if(result.height == 568)
+        {
+            imageName = [imageName stringByAppendingString:@"-iPhone4in"];
+        }
+    }
+    
+    return [imageName stringByAppendingString:@".png"];
+}
+
+- (void) handleTapCloseTutorialAddTrip:(UITapGestureRecognizer *)recognize
+{
+    for (UIView *subView in window.subviews)
+    {
+        if (subView.tag == 111)
+        {
+            [subView removeFromSuperview];
+            
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setBool:YES forKey:@"hasViewedTutorialPart1"];
+            [defaults synchronize];
+        }
     }
 }
 

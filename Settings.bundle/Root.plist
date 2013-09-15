@@ -6,99 +6,11 @@
 	<array>
 		<dict>
 			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
+			<string>PSTitleValueSpecifier</string>
 			<key>Title</key>
-			<string>Background updates:</string>
+			<string>Open the app to configure settings</string>
 			<key>Key</key>
-			<string>allowBackgroundUpdates</string>
-			<key>DefaultValue</key>
-			<true/>
-			<key>TrueValue</key>
-			<string>YES</string>
-			<key>FalseValue</key>
-			<string>NO</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
-			<key>Title</key>
-			<string>Default email:</string>
-			<key>Key</key>
-			<string>defaultEmail</string>
-			<key>KeyboardType</key>
-			<string>EmailAddress</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
-			<key>Title</key>
-			<string>Minutes to idle:</string>
-			<key>Key</key>
-			<string>maxIdleTime</string>
-			<key>DefaultValue</key>
-			<string>20</string>
-			<key>KeyboardType</key>
-			<string>NumberPad</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSTextFieldSpecifier</string>
-			<key>Title</key>
-			<string>Seconds between updates:</string>
-			<key>Key</key>
-			<string>updateInterval</string>
-			<key>DefaultValue</key>
 			<string></string>
-			<key>KeyboardType</key>
-			<string>NumberPad</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Connect points: </string>
-			<key>Key</key>
-			<string>showRouteLines</string>
-			<key>DefaultValue</key>
-			<true/>
-			<key>TrueValue</key>
-			<string>YES</string>
-			<key>FalseValue</key>
-			<string>NO</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSToggleSwitchSpecifier</string>
-			<key>Title</key>
-			<string>Show pins: </string>
-			<key>Key</key>
-			<string>showPins</string>
-			<key>DefaultValue</key>
-			<true/>
-			<key>TrueValue</key>
-			<string>YES</string>
-			<key>FalseValue</key>
-			<string>NO</string>
-		</dict>
-		<dict>
-			<key>Type</key>
-			<string>PSMultiValueSpecifier</string>
-			<key>Title</key>
-			<string>Distance Units</string>
-			<key>Key</key>
-			<string>distanceUnit</string>
-			<key>Titles</key>
-			<array>
-				<string>English</string>
-				<string>Metric</string>
-			</array>
-			<key>Values</key>
-			<array>
-				<string>0</string>
-				<string>1</string>
-			</array>
-			<key>DefaultValue</key>
-			<string>0</string>
 		</dict>
 	</array>
 	<key>StringsTable</key>

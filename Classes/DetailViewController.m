@@ -65,7 +65,6 @@
         [btnMailFloating addTarget:self action:@selector(openMail) forControlEvents:UIControlEventTouchUpInside];
         [btnMailFloating setTitle:@"Send" forState:UIControlStateNormal];
         CGFloat width = self.view.frame.size.width;
-        NSLog(@"%f",width);
         btnMailFloating.frame = CGRectMake(width-58, 55, 50, 35.0);
         [btnMailFloating setAlpha:.5];
         [self.view addSubview:btnMailFloating];
@@ -101,8 +100,6 @@
     
     self.idleTime = [[NSDate alloc] init];
     
-    showPins = true;
-    
     [self loadDefaults:false];
     
     [self loadAnnotationsToMap];
@@ -115,7 +112,148 @@
     if(self.selectedTrip.locations.count < 1)
         self.selectedTrip.logData = YES;
     switchLogData.on = self.selectedTrip.logData;
+    
+    [self addLongTapGestureRecognizer];
+    
+    [self showTutorialDetailView1IfNeeded];
+    
 }
+
+- (void)addLongTapGestureRecognizer {
+    UILongPressGestureRecognizer *gestureRecognizer = [[UILongPressGestureRecognizer alloc]
+                                          initWithTarget:self action:@selector(handleGesture:)];
+    
+    gestureRecognizer.minimumPressDuration = 0.5;
+    [_mapView addGestureRecognizer:gestureRecognizer];
+}
+
+- (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state != UIGestureRecognizerStateBegan)
+        return;
+    
+    CGPoint touchPoint = [gestureRecognizer locationInView:_mapView];
+    CLLocationCoordinate2D touchMapCoordinate =
+    [_mapView convertPoint:touchPoint toCoordinateFromView:_mapView];
+    
+    [self plotData:touchMapCoordinate];
+}
+
+- (void)showTutorialDetailView1IfNeeded {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    bool hasViewedTutorialPart2 = [defaults objectForKey:@"hasViewedTutorialPart2"];
+    if(!hasViewedTutorialPart2)
+        [self showTutorialDetailView1];
+}
+
+
+- (void)showTutorialDetailView1 {
+    
+    self.selectedTrip.logData = switchLogData.on = NO;
+    
+    UIImageView *imageView = [[UIImageView alloc]
+                              initWithImage:[UIImage imageNamed:[self getTutorial2ImageName]]];
+    imageView.tag = 555;
+    imageView.alpha = 0.8f;
+    imageView.frame = self.navigationController.view.frame;
+    
+    UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapCloseTutorialDetailView1:)];
+    recognizer.delegate = self;
+    [imageView addGestureRecognizer:recognizer];
+    imageView.userInteractionEnabled =  YES;
+    [self.navigationController.view addSubview:imageView];
+}
+
+- (void) handleTapCloseTutorialDetailView1:(UITapGestureRecognizer *)recognize
+{
+    for (UIView *subView in self.navigationController.view.subviews)
+    {
+        if (subView.tag == 555)
+        {
+            [subView removeFromSuperview];
+            [self showTutorialDetailView2];
+        }
+    }
+}
+
+- (void)showTutorialDetailView2 {
+    
+    UIImageView *imageView = [[UIImageView alloc]
+                              initWithImage:[UIImage imageNamed:[self getTutorial3ImageName]]];
+    imageView.tag = 666;
+    imageView.alpha = 0.8f;
+    imageView.frame = self.navigationController.view.frame;
+    
+    UITapGestureRecognizer * recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapCloseTutorialDetailView2:)];
+    recognizer.delegate = self;
+    [imageView addGestureRecognizer:recognizer];
+    imageView.userInteractionEnabled =  YES;
+    [self.navigationController.view addSubview:imageView];
+}
+
+- (void) handleTapCloseTutorialDetailView2:(UITapGestureRecognizer *)recognize
+{
+    for (UIView *subView in self.navigationController.view.subviews)
+    {
+        if (subView.tag == 666)
+        {
+            [subView removeFromSuperview];
+            
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            [defaults setBool:YES forKey:@"hasViewedTutorialPart2"];
+            [defaults synchronize];
+            
+            self.selectedTrip.logData = switchLogData.on = YES;
+            [self UpdateLogDataState];
+        }
+    }
+}
+
+- (NSString *)getTutorial2ImageName {
+    NSString *imageName = @"Tutorial-2";
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        imageName = [imageName stringByAppendingString:@"-iPad"];
+    }
+    else if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        CGSize result = [[UIScreen mainScreen] bounds].size;
+        if(result.height == 480)
+        {
+            imageName = [imageName stringByAppendingString:@"-iPhone3.5in"];
+        }
+        if(result.height == 568)
+        {
+            imageName = [imageName stringByAppendingString:@"-iPhone4in"];
+        }
+    }
+    
+    return [imageName stringByAppendingString:@".png"];
+}
+
+- (NSString *)getTutorial3ImageName {
+    NSString *imageName = @"Tutorial-3";
+    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+    {
+        imageName = [imageName stringByAppendingString:@"-iPad"];
+    }
+    else if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        CGSize result = [[UIScreen mainScreen] bounds].size;
+        if(result.height == 480)
+        {
+            imageName = [imageName stringByAppendingString:@"-iPhone3.5in"];
+        }
+        if(result.height == 568)
+        {
+            imageName = [imageName stringByAppendingString:@"-iPhone4in"];
+        }
+    }
+    
+    return [imageName stringByAppendingString:@".png"];
+}
+
 - (void) loadDefaults:(bool)preserveBaseInstant {
     [NSUserDefaults resetStandardUserDefaults];
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -130,6 +268,7 @@
     showRouteLines = [defaults boolForKey:@"showRouteLines"];
     showPins = [defaults boolForKey:@"showPins"];
     distanceUnit = [defaults integerForKey:@"distanceUnit"];
+    centerOnCurrentLocation = [defaults boolForKey:@"centerOnCurrentLocation"];
     if(selectedTrip != nil)
     {
         if(distanceUnit == 1)
@@ -208,6 +347,8 @@
                                                     [NSString stringWithFormat:@"%.0f",updateInterval], @"updateInterval",
                                                     [NSString stringWithFormat:@"%i",showRouteLines], @"showRouteLines",
                                                     [NSString stringWithFormat:@"%i",showPins], @"showPins",
+                                                    [NSString stringWithFormat:@"%i",distanceUnit], @"distanceUnit",
+                                                    [NSString stringWithFormat:@"%i",centerOnCurrentLocation], @"centerOnCurrentLocation",
                                                     nil];
         [FlurryAnalytics logEvent:@"loadDefaults" withParameters:dictionary];
     }
@@ -222,6 +363,7 @@
 
 - (void)enteringBackground {
     isInBackground = YES;
+    [self loadDefaults:true];
     if(!allowBackgroundUpdates)
         [self stopMonitoringLocation];
     self.idleTime = [NSDate date];
@@ -230,7 +372,10 @@
     isInBackground = NO;
     [self loadDefaults:false];
     [self UpdateLogDataState];
+    summaryBody.text = [self tripSummary:selectedTrip];
+    summarySubTitle.text = [self tripNumPoints:selectedTrip];
     [self drawRouteLines];
+    [self centerMapOnLatestPoint];
 }
 
 - (void)stopMonitoringLocation{
@@ -290,17 +435,20 @@
 
 - (void)locationUpdate:(CLLocation *)location {
     
-    //Update Flurry user location the first time
-    if(needsFlurryUpdate)
+    if(!isInBackground)
     {
-        [FlurryAnalytics setLatitude:location.coordinate.latitude
-                           longitude:location.coordinate.longitude            
-                  horizontalAccuracy:location.horizontalAccuracy            
-                    verticalAccuracy:location.verticalAccuracy]; 
-        needsFlurryUpdate = false;
-    }
+        //Update Flurry user location the first time
+        if(needsFlurryUpdate)
+        {
+            [FlurryAnalytics setLatitude:location.coordinate.latitude
+                               longitude:location.coordinate.longitude            
+                      horizontalAccuracy:location.horizontalAccuracy            
+                        verticalAccuracy:location.verticalAccuracy]; 
+            needsFlurryUpdate = false;
+        }
     
-    [self loadDefaults:true];
+        [self loadDefaults:true];
+    }
     
     //Unsubscribe from updates after a certain amount of idle time
     NSDate *currentTime = [NSDate date];
@@ -313,12 +461,13 @@
     
     if(location == nil)
         return;
+    
+    if(centerOnCurrentLocation)
+        [_mapView setCenterCoordinate:location.coordinate];
         
     if((fabsf(previousLat - location.coordinate.latitude) < .00001) &&
        (fabsf(previousLong - location.coordinate.longitude) < .00001))
         return;
-    
-    [_mapView setCenterCoordinate:location.coordinate];
     
     previousLat = location.coordinate.latitude;
     previousLong = location.coordinate.longitude;
@@ -348,7 +497,7 @@
     CLLocation *toLocation = [[CLLocation alloc] initWithCoordinate: toPoint.coordinate altitude:1 horizontalAccuracy:1 verticalAccuracy:-1 timestamp:nil];
     
     //Calculate distance in meters
-    CLLocationDistance baseDistance = [fromLocation distanceFromLocation:toLocation];
+    CLLocationDistance baseDistance = [fromLocation distanceFromLocation:toLocation] / 3.25;  // 4/3/13: 3.25 is arbitrary.  I have no idea why things are off by about that amount.
     
     double distance;
     if(unitEnum == 1)  //metres
@@ -411,24 +560,110 @@
             annotationView.pinColor = MKPinAnnotationColorRed;
         }
     
-        UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
-        //NSInteger annotationValue = [annView indexOfObject:annotation];
-        //rightButton.tag = annotationValue;
-        [rightButton addTarget:self action:@selector(userNoteButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        UIButton* rightButton = [self getAnnotationRightButton];
+        UIButton* leftButton = [self getAnnotationLeftButton];
+        
         annotationView.rightCalloutAccessoryView = rightButton;
+        annotationView.leftCalloutAccessoryView = leftButton;
         
     } 
     else {
+        
     }
     
     return annotationView;
     
 }
 
+- (UIButton *)getAnnotationRightButton
+{
+    UIButton* rightButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    //NSInteger annotationValue = [annView indexOfObject:annotation];
+    //rightButton.tag = annotationValue;
+    [rightButton addTarget:self action:@selector(userNoteButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    return rightButton;
+}
+
+- (UIButton *)getAnnotationLeftButton
+{
+    UIButton* sampleButton = [UIButton buttonWithType:UIButtonTypeInfoDark];
+    UIButton* leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    //UIImage *buttonIcon = [UIImage imageNamed:@"UIRemoveControlMinus@2x.png"];
+    UIImage *buttonIcon = [self ipMaskedImageNamed:@"UIRemoveControlMinus@2x.png" color:[UIColor redColor]];
+    
+    
+    leftButton.bounds = sampleButton.bounds;
+    [leftButton setImage:buttonIcon forState:UIControlStateNormal];
+    //NSInteger annotationValue = [annView indexOfObject:annotation];
+    //rightButton.tag = annotationValue;
+    [leftButton addTarget:self action:@selector(userRemoveButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    return leftButton;
+}
+
+- (UIImage *)ipMaskedImageNamed:(NSString *)name color:(UIColor *)color
+{
+    UIImage *image = [UIImage imageNamed:name];
+    CGRect rect = CGRectMake(0, 0, image.size.width, image.size.height);
+    UIGraphicsBeginImageContextWithOptions(rect.size, NO, image.scale);
+    CGContextRef c = UIGraphicsGetCurrentContext();
+    [image drawInRect:rect];
+    CGContextSetFillColorWithColor(c, [color CGColor]);
+    CGContextSetBlendMode(c, kCGBlendModeSourceAtop);
+    CGContextFillRect(c, rect);
+    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return result;
+}
+
 - (void)mapView:(MKMapView *)mapView1 didSelectAnnotationView:(MKAnnotationView *)mapView2
 {
     if (mapView2.annotation != self.mapView.userLocation) {
         highlightedAnnotation = (MyLocation *)mapView2.annotation;
+    }
+}
+
+- (void)userRemoveButtonPressed
+{
+    [self removeSelectedPoint];
+    return;
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setTitle:@"Remove point?"];
+    [alert setMessage:@"Are you sure?"];
+    [alert setDelegate:self];
+    [alert addButtonWithTitle:@"No"];
+    [alert addButtonWithTitle:@"Yes"];
+    [alert show];
+    [alert release];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+    {
+        // No
+    }
+    else if (buttonIndex == 1)
+    {
+        // Yes
+        [self removeSelectedPoint];
+    }
+}
+    
+- (void)removeSelectedPoint {
+    selectedLocationIndex = highlightedAnnotation.index;
+    
+    MyLocation *highlightedLocationObj = [selectedTrip.locations objectAtIndex:selectedLocationIndex];
+    
+    [_mapView removeAnnotation:highlightedLocationObj];
+    
+    [selectedTrip removeLocation:highlightedLocationObj];
+    //[selectedTrip removeLocationAtIndex:selectedLocationIndex];
+    
+    if(showRouteLines)
+    {
+        [self clearRouteLines];
+        
+        [self drawRouteLines];
     }
 }
 
@@ -486,7 +721,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         NSString *userNote = alertView.inputTextField.text;
             
         MKAnnotationView* aView = [_mapView viewForAnnotation:highlightedAnnotation];
-        MyLocation *initialAnnotation = highlightedAnnotation;
+        MyLocation *initialAnnotation = highlightedAnnotation;         
             
         //update current location with user note
         MyLocation *highlightedLocationObj = [selectedTrip.locations objectAtIndex:selectedLocationIndex];
@@ -496,7 +731,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         else {
             highlightedLocationObj.name = [NSString stringWithFormat:@"Point %i  (%@)",selectedLocationIndex+1,highlightedLocationObj.time];
         }
-        
+            
         highlightedLocationObj.userNote = userNote;
         
         if(initialAnnotation != nil)
@@ -545,67 +780,58 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 - (void)plotData:(CLLocationCoordinate2D)coordinate {
     [FlurryAnalytics logEvent:@"NewLocation"];
     
-    MyLocation *lastPoint = selectedTrip.locations.lastObject;
     CLLocation *newLocation = [[CLLocation alloc] initWithCoordinate: coordinate altitude:1 horizontalAccuracy:1 verticalAccuracy:-1 timestamp:nil];
-    CLLocation *oldLocation = [[CLLocation alloc] initWithCoordinate: lastPoint.coordinate altitude:1 horizontalAccuracy:1 verticalAccuracy:-1 timestamp:nil];
-    
     NSString * name = [self coordinateString:coordinate];
-    
-    NSString * address;
-    if(selectedTrip.locations.count > 1){
-        CLLocationDistance distance = [newLocation distanceFromLocation:oldLocation] * 0.000621371192;  //in Miles
-        address = [NSString stringWithFormat:@"%.2f Miles from last point",distance];
-    } else {
-        address = @"";
-    }
-    
     NSString *time = [self currentTime];
-    
     
     int newPointIndex = selectedTrip.locations.count;
     name = [NSString stringWithFormat:@"Point %i  (%@)",newPointIndex+1,time];
     
-    tempAnnotation = [[MyLocation alloc] initWithName:name address:address coordinate:coordinate time:time index:newPointIndex];
-    //tempAnnotation.intervalSinceTripStart = [selectedTrip intervalSinceStart];
+    tempAnnotation = [[MyLocation alloc] initWithName:name address:@"" coordinate:coordinate time:time index:newPointIndex];
     
-    CLGeocoder *geo = [[CLGeocoder alloc] init];
-    [geo reverseGeocodeLocation:newLocation completionHandler:^(NSArray *placemarks, NSError *error) {
-        if(error)
-        {
-            NSString *subtitle = [NSString stringWithFormat:@"No address: %@",tempAnnotation.coordName];
-            [tempAnnotation setSubtitle:subtitle];
-            [selectedTrip addLocation:tempAnnotation];
-            if(showPins)
-                [_mapView addAnnotation:tempAnnotation];    
-            
-            if(summaryBody.alpha > 0)
+    bool geocodeAddresses = true;
+    if(!geocodeAddresses)
+    {
+        NSString *subtitle = tempAnnotation.coordName;
+        [self updatePoint:tempAnnotation withDescription:subtitle];
+    }
+    else
+    {
+        [reverseGeo reverseGeocodeLocation:newLocation completionHandler:^(NSArray *placemarks, NSError *error) {
+            if(error)
             {
-                summaryBody.text = [self tripSummary:selectedTrip];
-                summarySubTitle.text = [self tripNumPoints:selectedTrip];
+                NSString *subtitle = [NSString stringWithFormat:@"No address: %@",tempAnnotation.coordName];
+                [self updatePoint:tempAnnotation withDescription:subtitle];
             }
-            [self drawRouteLines];
-        }
-        else
-        {
-            CLPlacemark *placemark = [placemarks objectAtIndex:0];
-            
-            NSString *subtitle = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
-            
-            [tempAnnotation setSubtitle:subtitle];
-            [selectedTrip addLocation:tempAnnotation];
-            if(showPins)
-                [_mapView addAnnotation:tempAnnotation];
-            
-            if(summaryBody.alpha > 0)
+            else
             {
-                summaryBody.text = [self tripSummary:selectedTrip];
-                summarySubTitle.text = [self tripNumPoints:selectedTrip];
+                CLPlacemark *placemark = [placemarks objectAtIndex:0];
+                NSString *subtitle = ABCreateStringWithAddressDictionary(placemark.addressDictionary, NO);
+                [self updatePoint:tempAnnotation withDescription:subtitle];
             }
-            [self drawRouteLines];
-        
-        }
-    }];
+        }];
+    }
+}
+
+- (void)updatePoint:(MyLocation *)annotation withDescription:(NSString *)description
+{
+    if(showPins)
+        [_mapView addAnnotation:annotation];
     
+    if(showRouteLines)
+        [self addRouteLineForPoint:annotation.coordinate];
+    
+    [annotation setSubtitle:description];
+    [selectedTrip addLocation:annotation];
+    
+    if(!isInBackground)
+    {
+        if(summaryBody.alpha > 0)
+        {
+            summaryBody.text = [self tripSummary:selectedTrip];
+            summarySubTitle.text = [self tripNumPoints:selectedTrip];
+        }
+    }
 }
 
 - (void)updateAnnotations{
@@ -622,14 +848,23 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     
 }
 
+- (void)clearRouteLines {
+    [self.mapView removeOverlays:self.mapView.overlays];
+    if(self.route != nil)
+    {
+        //[self.mapView removeOverlay:route];
+        self.route = nil;
+    }
+}
+
 - (void)drawRouteLines
 {
     if(!showRouteLines)
     {
-        if(route != nil)
+        if(self.route != nil)
         {
             [self.mapView removeOverlay:route];
-            route = nil;
+            self.route = nil;
         }
         return;
     }
@@ -646,9 +881,24 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     
     MKPolyline *newRoute = [MKPolyline polylineWithCoordinates: coordinates count: self.selectedTrip.locations.count];
     [self.mapView addOverlay:newRoute];
-    if(route != nil)
-        [self.mapView removeOverlay:route];
-    route = newRoute;
+    
+    if(self.route != nil)
+        [self.mapView removeOverlay:self.route];
+    
+    self.route = newRoute;
+}
+
+- (void)addRouteLineForPoint:(CLLocationCoordinate2D)newPoint {
+    if(self.selectedTrip.locations.count < 1)
+        return;
+    
+    MyLocation *previousLocation = self.selectedTrip.locations.lastObject;
+    
+    CLLocationCoordinate2D coordinates[2];
+    coordinates[0] = newPoint;
+    coordinates[1] = previousLocation.coordinate;
+    
+    [self.mapView addOverlay:[MKPolyline polylineWithCoordinates:coordinates count:2]];
 }
 
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay {
@@ -819,6 +1069,13 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     [_mapView setRegion:region animated:TRUE];
 }
 
+- (void)centerMapOnLatestPoint {
+    if(selectedTrip.locations.count < 1)
+        return;
+    MyLocation *lastLocation = selectedTrip.locations.lastObject;
+    [_mapView setCenterCoordinate:lastLocation.coordinate];
+}
+
 //Removes from both the mapView annotations array and the Trip locations array
 - (void)removeAllAnnotations {
     
@@ -950,6 +1207,9 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         
         [mailer addAttachmentData:imageData mimeType:@"image/png" fileName:@"My Trip Log trip.jpg"];
         
+        NSData *gpxFile = [self GenerateGPX];
+        [mailer addAttachmentData:gpxFile mimeType:@"text/plain" fileName:@"My Trip Log trip.gpx"];
+        
         [mailer setMessageBody:contents isHTML:NO];
         
         [self presentModalViewController:mailer animated:YES];
@@ -969,7 +1229,32 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     
 }
 
-//-(void)saveImage{       
+- (NSData *)GenerateGPX
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"];
+    NSString *contents = [NSString stringWithFormat:@"<gpx xmlns=\"http://www.topografix.com/GPX/1/1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" version=\"1.1\" creator=\"My Trip Log App - http://www.thanscorner.info/trip-log/\"> \n<metadata>\n<name></name>\n<time>%@</time>\n</metadata>\n<trk>\n<name>%@</name>\n<desc>Created with My Trip Log</desc>\n<trkseg>", [formatter stringFromDate:[NSDate date]], selectedTrip.tripName];
+    
+    
+    NSString *data = @"";
+    int count = selectedTrip.locations.count;
+    for(int i=0;i<count;i++){
+        MyLocation *location = [selectedTrip.locations objectAtIndex:i];
+        NSString *timestamp = [formatter stringFromDate:location.foundDate];
+        NSString *desc = @"";
+        if(location.userNote.length > 0)
+            desc = [NSString stringWithFormat:@"\n<desc>%@</desc>", location.userNote];
+        NSString *locationData = [NSString stringWithFormat:@"\n<trkpt lon=\"%@\" lat=\"%@\">\n<time>%@</time>%@\n</trkpt>", location.longStr, location.latStr, timestamp, desc];
+        data = [data stringByAppendingString:locationData];
+    }
+    contents = [contents stringByAppendingString:data];
+    
+    contents = [contents stringByAppendingString:@"\n</trkseg>\n</trk>\n</gpx>"];
+
+    return [contents dataUsingEncoding:NSASCIIStringEncoding];
+}
+
+//-(void)saveImage{
 //    CGImageRef screen = UIGetScreenImage();
 //    UIImage* image = [UIImage imageWithCGImage:screen];
 //    CGImageRelease(screen);

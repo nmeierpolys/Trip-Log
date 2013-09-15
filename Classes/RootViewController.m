@@ -13,6 +13,7 @@
 #import "TSAlertView.h"
 #import "SplashScreen.h"
 #import "FlurryAnalytics.h"
+#import <Crashlytics/Crashlytics.h>
 
 @implementation RootViewController
 
@@ -68,10 +69,13 @@
             if([trip fileName] != nil){   
                 if(trip.startInstant == nil)
                     trip.startInstant = [NSDate date];
+                NSNumber *logDataNum = [NSNumber numberWithBool:[trip logData]];
+                
                 NSDictionary *tripInfo = [[NSDictionary alloc] initWithObjectsAndKeys:
                                           [trip tripName],@"tripName",
                                           [trip fileName],@"fileName", 
                                           [trip startInstant],@"startInstant",
+                                          logDataNum,@"logData",
                                           nil];
                 [plistArr addObject:tripInfo];
             }
@@ -103,6 +107,10 @@
     
     //Translate plist array into annotation objects and add to _mapView
     NSUInteger count = [plistArr count];
+    
+    if(count > 0)
+        [self disableTutorial];
+    
     for (NSUInteger i = 0; i < count; i++) {
         
         //Retrieve objects out of this element's dictionary
@@ -131,6 +139,14 @@
         }
     }  
     [self loadTripContents];
+}
+
+- (void)disableTutorial {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:YES forKey:@"hasViewedTutorialPart1"];
+    [defaults setBool:YES forKey:@"hasViewedTutorialPart2"];
+    [defaults setBool:YES forKey:@"hasViewedTutorialPart3"];
+    [defaults synchronize];
 }
 
 
@@ -485,11 +501,25 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     
 	cell.textLabel.text = tripTitle;
     cell.detailTextLabel.text = tripSubtitle;
-    UIImage * backgroundImage = [[UIImage alloc] initWithContentsOfFile:imageName];
-    cell.imageView.image = backgroundImage;
+    //UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:imageName];
+    //UIImage *thumb = [self resizeImage:backgroundImage toSize:CGSizeMake(20, 20)];
+    //cell.imageView.image = thumb;
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
     return cell;
+}
+
+- (UIImage *) resizeImage:(UIImage *)image toSize:(CGSize)size
+{
+    UIGraphicsBeginImageContextWithOptions(size, NO, UIScreen.mainScreen.scale);
+    // draw scaled image into thumbnail context
+    [image drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    UIImage *newThumbnail = UIGraphicsGetImageFromCurrentImageContext();
+    // pop the context
+    UIGraphicsEndImageContext();
+    if(newThumbnail == nil)
+        NSLog(@"could not scale image");
+    return newThumbnail;
 }
 
 

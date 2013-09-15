@@ -40,6 +40,32 @@
     [locations addObject:location];               // Add the location to the trip's locations array
 }
 
+- (void)removeLocationAtIndex:(NSUInteger)index{
+    if((locations == nil) || (index < 0) || (index > locations.count))
+        return;
+    
+    [locations removeObjectAtIndex:index];
+    [self computeDistancesOfLocations];
+}
+
+- (void)removeLocation:(MyLocation *)location {
+    if(locations == nil)
+        return;
+    
+    [locations removeObject:location];
+    [self updateLocationIndexes];
+    [self computeDistancesOfLocations];
+}
+
+- (void)updateLocationIndexes {
+    int count = locations.count;
+    
+    //Loop through all locations, updating the index value of each
+    for(int i=0;i<count;i++){
+        [[locations objectAtIndex:i] setIndex:i];
+    }
+}
+
 - (void)clearLocations{
     if((locations != nil) && (locations.count > 0))
         [locations removeAllObjects];
@@ -179,10 +205,12 @@
     MyLocation *currentLocation;
     MyLocation *previousLocation = firstLocation;
     
-    //Loop through all locations, incrementally compute distances and 
+    //Loop through all locations, incrementally compute distances and
+    cumulativeDistance = 0;
     for(int i=1;i<count;i++){
         currentLocation = [locations objectAtIndex:i];
         cumulativeDistance += [self distanceBetweenPoints:previousLocation toPoint:currentLocation unitEnum:unit];
+        NSLog(@"%f / %f",[self distanceBetweenPoints:previousLocation toPoint:currentLocation unitEnum:unit],cumulativeDistance);
         previousLocation = currentLocation;
     }
     
@@ -199,7 +227,7 @@
     CLLocation *toLocation = [[CLLocation alloc] initWithCoordinate: toPoint.coordinate altitude:1 horizontalAccuracy:1 verticalAccuracy:-1 timestamp:nil];
     
     //Calculate distance in meters
-    CLLocationDistance baseDistance = [fromLocation distanceFromLocation:toLocation];
+    double baseDistance = [fromLocation distanceFromLocation:toLocation] / 3.25;  // 4/3/13: 3.25 is arbitrary.  I have no idea why things are off by about that amount.
     
     double distance;
     if(unitEnum == 1)  //metres
@@ -210,10 +238,6 @@
         distance = baseDistance * 3.280840;
     else if(unitEnum == 3)  //kilometres
         distance = baseDistance * 0.001;
-    
-    //NSString *fromCoord = [NSString stringWithFormat:@"(%f,%f)",fromLocation.coordinate.latitude,fromLocation.coordinate.longitude];
-    
-    //NSString *toCoord = [NSString stringWithFormat:@"(%f,%f)",toLocation.coordinate.latitude,toLocation.coordinate.longitude];
     
     return distance;
 }
