@@ -53,7 +53,7 @@
     appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     
     NSString *urlStr = @"http://www.thanscorner.info/iPhoneAPI/index.php";
-    NSDictionary *parameters = [[NSDictionary alloc] init ];
+    NSDictionary *parameters;
     NSArray *keys = [NSArray arrayWithObjects:
                      @"DeviceType",
                      @"Version",

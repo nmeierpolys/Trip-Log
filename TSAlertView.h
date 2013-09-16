@@ -54,7 +54,7 @@ typedef enum
 }
 @property(nonatomic, copy) NSString *title;
 @property(nonatomic, copy) NSString *message;
-@property(nonatomic, assign) id<TSAlertViewDelegate> delegate;
+@property(nonatomic, unsafe_unretained) id<TSAlertViewDelegate> delegate;
 @property(nonatomic) NSInteger cancelButtonIndex;
 @property(nonatomic, readonly) NSInteger firstOtherButtonIndex;
 @property(nonatomic, readonly) NSInteger numberOfButtons;
@@ -64,9 +64,9 @@ typedef enum
 @property(nonatomic, assign) CGFloat width;
 @property(nonatomic, assign) CGFloat maxHeight;
 @property(nonatomic, assign) BOOL usesMessageTextView;
-@property(nonatomic, retain) UIImage* backgroundImage;
+@property(nonatomic, strong) UIImage* backgroundImage;
 @property(nonatomic, assign) TSAlertViewStyle style;
-@property(nonatomic, readonly) UITextField* inputTextField;
+@property(unsafe_unretained, nonatomic, readonly) UITextField* inputTextField;
 
 - (id)initWithTitle:(NSString *)title message:(NSString *)message delegate:(id)delegate cancelButtonTitle:(NSString *)cancelButtonTitle otherButtonTitles:(NSString *)otherButtonTitles, ...;
 - (NSInteger)addButtonWithTitle:(NSString *)title;

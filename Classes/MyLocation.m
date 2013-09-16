@@ -113,7 +113,6 @@
 }
 
 - (void)setSubtitle:(NSString *)subtitle{
-    [subtitle retain];
     _address = subtitle;
 }
 
@@ -130,15 +129,5 @@
 //    
 //}
 
-- (void)dealloc
-{
-    [_name release];
-    _name = nil;
-    [_address release];
-    _address = nil; 
-    [time release];
-    time = nil;   
-    [super dealloc];
-}
 
 @end

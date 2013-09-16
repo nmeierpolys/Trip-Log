@@ -10,7 +10,7 @@
 #import <MessageUI/MessageUI.h>
 #import <QuartzCore/CoreAnimation.h>
 #import <UIKit/UIKit.h>
-#import <AddressBook/AddressBook.h>
+#import "AddressBookUI/AddressBookUI.h"
 #import "FlurryAnalytics.h"
 #import "TSAlertView.h"
 
@@ -92,7 +92,6 @@
     NSString* imageName = [[NSBundle mainBundle] pathForResource:@"linen_bg_tile" ofType:@"jpg"];
     UIImage * backgroundImage = [[UIImage alloc] initWithContentsOfFile:imageName];
     summaryView.backgroundColor = [UIColor colorWithPatternImage:backgroundImage];
-    [backgroundImage release];
     [summaryView setOpaque:NO];
     
     
@@ -405,17 +404,6 @@
 }
 
 
-- (void)dealloc {
-    [summaryView release];
-    [summaryTitle release];
-    [summaryRight release];
-    [summaryBody release];
-    [summaryTitle release];
-    [summarySubTitle release];
-    [MapTypeValue release];
-    [switchLogData release];
-    [super dealloc];
-}
 
 
 - (void)loadAnnotationsToMap {
@@ -499,7 +487,7 @@
     //Calculate distance in meters
     CLLocationDistance baseDistance = [fromLocation distanceFromLocation:toLocation] / 3.25;  // 4/3/13: 3.25 is arbitrary.  I have no idea why things are off by about that amount.
     
-    double distance;
+    double distance = 0;
     if(unitEnum == 1)  //metres
         distance = baseDistance;
     else if(unitEnum == 2)  //miles
@@ -539,7 +527,7 @@
         MyLocation *location = (MyLocation *)annotation;
         
         if (annotationView == nil) 
-            annotationView = [[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultID] autorelease];
+            annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:defaultID];
         
         annotationView.canShowCallout = YES;
         annotationView.animatesDrop= NO;
@@ -633,7 +621,6 @@
     [alert addButtonWithTitle:@"No"];
     [alert addButtonWithTitle:@"Yes"];
     [alert show];
-    [alert release];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -677,7 +664,7 @@
     {
         MyLocation *location = [selectedTrip.locations objectAtIndex:selectedLocationIndex];
         //////Advanced
-        TSAlertView* av = [[[TSAlertView alloc] init] autorelease];
+        TSAlertView* av = [[TSAlertView alloc] init];
         NSString *header = [self pointName:selectedLocationIndex];
         header = [NSString stringWithFormat:@"Point %i (%@)",selectedLocationIndex+1,header];
         
@@ -781,7 +768,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     [FlurryAnalytics logEvent:@"NewLocation"];
     
     CLLocation *newLocation = [[CLLocation alloc] initWithCoordinate: coordinate altitude:1 horizontalAccuracy:1 verticalAccuracy:-1 timestamp:nil];
-    NSString * name = [self coordinateString:coordinate];
+    NSString * name; // = [self coordinateString:coordinate];
     NSString *time = [self currentTime];
     
     int newPointIndex = selectedTrip.locations.count;
@@ -903,7 +890,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay {
     
-    MKPolylineView *polylineView = [[[MKPolylineView alloc] initWithPolyline:overlay] autorelease];
+    MKPolylineView *polylineView = [[MKPolylineView alloc] initWithPolyline:overlay];
     polylineView.strokeColor = [UIColor blueColor];
     polylineView.lineWidth = 4.0;
     
@@ -928,7 +915,6 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         currentTime = @"";
     else
         currentTime = [dateFormatter stringFromDate:[NSDate date]]; //pointLocation.foundDate
-    [dateFormatter release];
     
     //Build name
     NSString *name = [NSString stringWithFormat:@"%@",currentTime];
@@ -941,7 +927,6 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"h:mm:ss a"];
     NSString *currentTime = [dateFormatter stringFromDate:today];
-    [dateFormatter release];
     return [NSString stringWithFormat:@"%@",currentTime];
 }
 
@@ -950,7 +935,6 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"MM/dd/yyyy"];
     NSString *currentDate = [dateFormatter stringFromDate:today]; 
-    [dateFormatter release];
     return [NSString stringWithFormat:@"%@",currentDate];
 }
 
@@ -964,7 +948,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 }
 
 - (NSString *)tripSummary:(Trip *)trip{ 
-    NSString *output = [[NSString alloc] init];
+    NSString *output;
     NSString *distances = [NSString stringWithFormat:@"Cumulative Distance: %@\n",
                            [trip cumulativeDistanceAutoformatted]];
     distances = [distances stringByAppendingFormat:@"Direct Distance: %@\n",
@@ -1008,7 +992,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 }
 
 - (NSString *)tripNumPoints:(Trip *)trip{ 
-    NSString *output = [[NSString alloc] init];
+    NSString *output;
     
     int count = trip.locations.count;
     output = [NSString stringWithFormat:@"Points: %i",count];
@@ -1214,7 +1198,6 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         
         [self presentModalViewController:mailer animated:YES];
         
-        [mailer release];
     }
     else
     {
@@ -1224,7 +1207,6 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
                                               cancelButtonTitle:@"OK" 
                                               otherButtonTitles: nil];
         [alert show];
-        [alert release];
     }
     
 }
@@ -1302,19 +1284,12 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 
 
 - (void)viewDidUnload {
-    [summaryView release];
     summaryView = nil;
-    [summaryRight release];
     summaryRight = nil;
-    [summaryBody release];
     summaryBody = nil;
-    [summaryTitle release];
     summaryTitle = nil;
-    [summarySubTitle release];
     summarySubTitle = nil;
-    [MapTypeValue release];
     MapTypeValue = nil;
-    [switchLogData release];
     switchLogData = nil;
     [super viewDidUnload];
 

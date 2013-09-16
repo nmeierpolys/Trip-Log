@@ -132,7 +132,7 @@ extern NSString *const kAppiraterReminderRequestDate;
 	UIAlertView		*ratingAlert;
 }
 
-@property(nonatomic, retain) UIAlertView *ratingAlert;
+@property(nonatomic, strong) UIAlertView *ratingAlert;
 
 /*
  DEPRECATED: While still functional, it's better to use

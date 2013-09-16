@@ -12,7 +12,7 @@
 	NSMutableArray *listOfItems;
     NSMutableArray *trips;
 }
-@property (nonatomic, retain) NSMutableArray *trips;
+@property (nonatomic, strong) NSMutableArray *trips;
 
 - (IBAction)btnBackClicked:(id)sender;
 

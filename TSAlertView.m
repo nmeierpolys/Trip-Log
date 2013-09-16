@@ -10,7 +10,7 @@
 @interface TSAlertOverlayWindow : UIWindow
 {
 }
-@property (nonatomic,retain) UIWindow* oldKeyWindow;
+@property (nonatomic,strong) UIWindow* oldKeyWindow;
 @end
 
 @implementation  TSAlertOverlayWindow
@@ -55,11 +55,9 @@
 
 - (void) dealloc
 {
-	self.oldKeyWindow = nil;
 	
 	NSLog( @"TSAlertView: TSAlertOverlayWindow dealloc" );
 	
-	[super dealloc];
 }
 
 @end
@@ -107,7 +105,6 @@
 - (void) dealloc
 {
 	NSLog( @"TSAlertView: TSAlertViewController dealloc" );
-	[super dealloc];
 }
 
 @end
@@ -209,18 +206,11 @@ const CGFloat kTSAlertView_ColumnMargin = 10.0;
 
 - (void)dealloc 
 {
-	[_backgroundImage release];
-	[_buttons release];
-	[_titleLabel release];
-	[_messageLabel release];
-	[_messageTextView release];
-	[_messageTextViewMaskImageView release];
 	
 	[[NSNotificationCenter defaultCenter] removeObserver: self ];
 	
 	NSLog( @"TSAlertView: TSAlertOverlayWindow dealloc" );
 	
-    [super dealloc];
 }
 
 
@@ -327,7 +317,7 @@ const CGFloat kTSAlertView_ColumnMargin = 10.0;
 {
 	if ( _buttons == nil )
 	{
-		_buttons = [[NSMutableArray arrayWithCapacity:4] retain];
+		_buttons = [NSMutableArray arrayWithCapacity:4];
 	}
 	
 	return _buttons;
@@ -547,14 +537,14 @@ const CGFloat kTSAlertView_ColumnMargin = 10.0;
 	// the one place we release the window we allocated in "show"
 	// this will propogate releases to us (TSAlertView), and our TSAlertViewController
 	
-	[self.window release];
+	self.window;
 }
 
 - (void) show
 {
 	[[NSRunLoop currentRunLoop] runMode: NSDefaultRunLoopMode beforeDate:[NSDate date]];
 	
-	TSAlertViewController* avc = [[[TSAlertViewController alloc] init] autorelease];
+	TSAlertViewController* avc = [[TSAlertViewController alloc] init];
 	avc.view.backgroundColor = [UIColor clearColor];
 	
 	// $important - the window is released only when the user clicks an alert view button

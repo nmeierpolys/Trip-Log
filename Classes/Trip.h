@@ -20,9 +20,9 @@
     NSDate *startInstant;
 }
 
-@property (retain, nonatomic) NSMutableArray *locations;
-@property (retain, nonatomic) NSString *tripName;
-@property (retain, nonatomic) NSString *fileName;
+@property (strong, nonatomic) NSMutableArray *locations;
+@property (strong, nonatomic) NSString *tripName;
+@property (strong, nonatomic) NSString *fileName;
 @property double cumulativeDistance;
 @property double directDistance;
 @property bool useMetric;

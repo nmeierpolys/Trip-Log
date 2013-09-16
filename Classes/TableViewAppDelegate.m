@@ -174,9 +174,4 @@ void uncaughtExceptionHandler(NSException *exception) {
     }
 }
 
-- (void)dealloc {
-	[navigationController release];
-	[window release];
-	[super dealloc];
-}
 @end

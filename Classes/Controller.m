@@ -15,7 +15,6 @@
 {
     engine = nil;
     picker = nil;
-    [super dealloc];
 }
 
 #pragma mark -

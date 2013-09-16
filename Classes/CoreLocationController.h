@@ -20,10 +20,10 @@
 
 @interface CoreLocationController : NSObject <CLLocationManagerDelegate> {
 	CLLocationManager *locMgr;
-	id delegate;
+	id __unsafe_unretained delegate;
 }
 
-@property (nonatomic, retain) CLLocationManager *locMgr;
-@property (nonatomic, assign) id delegate;
+@property (nonatomic, strong) CLLocationManager *locMgr;
+@property (nonatomic, unsafe_unretained) id delegate;
 
 @end

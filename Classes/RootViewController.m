@@ -34,7 +34,6 @@
     
     UIBarButtonItem *tempButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(importTap)];
     self.navigationItem.rightBarButtonItem = tempButton;
-    [tempButton release];
     
     //Mine
     trips = [[NSMutableArray alloc] init];    
@@ -89,7 +88,7 @@
 - (void)loadTripListFromPlist{
     
     //Initialize    
-    NSArray *plistArr = [[NSArray alloc] init];
+    NSArray *plistArr;
     
     //Plist document path
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -189,7 +188,7 @@
 
 - (void) importTap
 {
-    TSAlertView* av = [[[TSAlertView alloc] init] autorelease];
+    TSAlertView* av = [[TSAlertView alloc] init];
     av.title = @"Trip name:";
     av.message = @"";
     
@@ -356,7 +355,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 - (void)loadTripFromPlist:(int)index{
 
     //Initialize    
-    NSArray *plistArr = [[NSArray alloc] init];
+    NSArray *plistArr;
     
     //Plist document path
     NSString *documentsDirectory = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -460,7 +459,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"MyIdentifier"] autorelease];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"MyIdentifier"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
@@ -480,7 +479,6 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
             [dateFormatter setDateFormat:@"MM/dd/yyyy"];
             
             id tripDate = [dateFormatter stringFromDate:lastPoint.foundDate]; 
-            [dateFormatter release];
             
             tripSubtitle = tripDate;
         }
@@ -497,7 +495,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
         tripSubtitle = [NSString stringWithFormat:@"%@ %i point(s)",tripSubtitle,numLocations];
     }
     
-    NSString* imageName = [[NSBundle mainBundle] pathForResource:@"imgres" ofType:@"jpeg"];
+    //NSString* imageName = [[NSBundle mainBundle] pathForResource:@"imgres" ofType:@"jpeg"];
     
 	cell.textLabel.text = tripTitle;
     cell.detailTextLabel.text = tripSubtitle;
@@ -540,7 +538,7 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
     
     
     if(indexPath.row >= trips.count){
-        TSAlertView* av = [[[TSAlertView alloc] init] autorelease];
+        TSAlertView* av = [[TSAlertView alloc] init];
         av.title = @"Problem";
         av.message = @"Trip exists in table with no plist";
         
@@ -613,11 +611,6 @@ didDismissWithButtonIndex: (NSInteger) buttonIndex
 */
 
 
-- (void)dealloc {
-	
-	[listOfItems release];
-    [super dealloc];
-}
 
 @end
 

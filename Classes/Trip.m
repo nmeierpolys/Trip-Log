@@ -229,7 +229,7 @@
     //Calculate distance in meters
     double baseDistance = [fromLocation distanceFromLocation:toLocation] / 3.25;  // 4/3/13: 3.25 is arbitrary.  I have no idea why things are off by about that amount.
     
-    double distance;
+    double distance = 0;
     if(unitEnum == 1)  //metres
         distance = baseDistance;
     else if(unitEnum == 2)  //miles
@@ -281,7 +281,6 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"M/d/yyyy"];
     NSString *currentDate = [dateFormatter stringFromDate:today]; 
-    [dateFormatter release];
     return [NSString stringWithFormat:@"%@",currentDate];
 }
 
@@ -289,7 +288,6 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"M/d/yyyy"];
     NSString *currentDate = [dateFormatter stringFromDate:self.startInstant]; 
-    [dateFormatter release];
     return [NSString stringWithFormat:@"%@",currentDate];
 }
 

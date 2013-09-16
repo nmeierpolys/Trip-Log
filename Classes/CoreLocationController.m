@@ -16,7 +16,7 @@
 	self = [super init];
 	
 	if(self != nil) {
-		self.locMgr = [[[CLLocationManager alloc] init] autorelease];
+		self.locMgr = [[CLLocationManager alloc] init];
 		self.locMgr.delegate = self;
 	}
     if([self.locMgr respondsToSelector:@selector(pausesLocationUpdatesAutomatically)])
@@ -44,8 +44,7 @@
 }
 
 - (void)dealloc {
-	[self.locMgr release];
-	[super dealloc];
+	self.locMgr;
 }
 
 @end

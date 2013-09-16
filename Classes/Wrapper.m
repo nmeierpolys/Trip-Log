@@ -41,14 +41,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    receivedData = nil;
-    self.mimeType = nil;
-    self.username = nil;
-    self.password = nil;
-    [super dealloc];
-}
 
 #pragma mark -
 #pragma mark Public methods

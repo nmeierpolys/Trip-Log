@@ -71,23 +71,23 @@
 - (IBAction)btnZoom:(id)sender;
 - (IBAction)btnToggleText:(id)sender;
 - (IBAction)switchLogDataChanged:(id)sender;
-@property (retain, nonatomic) IBOutlet MKMapView *mapView;
-@property (nonatomic, retain) CoreLocationController *CLController;
-@property (nonatomic, retain) CLGeocoder *reverseGeo;
-@property (nonatomic, retain) Trip *selectedTrip;
-@property (nonatomic, retain) MyLocation *selectedLocation;
-@property (nonatomic, retain) UIViewController *parentTable;
-@property (nonatomic, retain) NSDate *lastUpdate;
-@property (nonatomic, retain) NSDate *idleTime;
-@property (nonatomic, retain) MKPolyline *route;
+@property (strong, nonatomic) IBOutlet MKMapView *mapView;
+@property (nonatomic, strong) CoreLocationController *CLController;
+@property (nonatomic, strong) CLGeocoder *reverseGeo;
+@property (nonatomic, strong) Trip *selectedTrip;
+@property (nonatomic, strong) MyLocation *selectedLocation;
+@property (nonatomic, strong) UIViewController *parentTable;
+@property (nonatomic, strong) NSDate *lastUpdate;
+@property (nonatomic, strong) NSDate *idleTime;
+@property (nonatomic, strong) MKPolyline *route;
 @property CLLocationDegrees previousLat;
 @property CLLocationDegrees previousLong;
 @property int selectedLocationIndex;
-@property (nonatomic, retain)
+@property (nonatomic, strong)
     NSMutableArray *addresses;
-@property (nonatomic, retain) IASKAppSettingsViewController *appSettingsViewController;
-@property (nonatomic, retain) NSDate *nextValidPointTime;
-@property (nonatomic, retain) NSDate *baseInstant;
+@property (nonatomic, strong) IASKAppSettingsViewController *appSettingsViewController;
+@property (nonatomic, strong) NSDate *nextValidPointTime;
+@property (nonatomic, strong) NSDate *baseInstant;
 - (void)zoomView:(double) zoomLevelLocal;
 - (void)loadAnnotationsToMap;
 - (void)saveInfo;

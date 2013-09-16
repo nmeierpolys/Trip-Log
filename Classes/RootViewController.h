@@ -15,9 +15,9 @@
     bool hasUnsavedChanges;
 }
 
-@property (nonatomic, retain) NSMutableArray *trips;
+@property (nonatomic, strong) NSMutableArray *trips;
 @property int updatedRow;
-@property (nonatomic, retain) Trip *updatedTrip;
+@property (nonatomic, strong) Trip *updatedTrip;
 @property bool hasUnsavedChanges;
 
 - (void)loadDummyTrips;

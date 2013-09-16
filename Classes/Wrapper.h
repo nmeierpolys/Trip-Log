@@ -26,7 +26,7 @@
 @property (nonatomic, copy) NSString *mimeType;
 @property (nonatomic, copy) NSString *username;
 @property (nonatomic, copy) NSString *password;
-@property (nonatomic, retain) NSObject<WrapperDelegate> *delegate; // Do not retain delegates!
+@property (nonatomic, strong) NSObject<WrapperDelegate> *delegate; // Do not retain delegates!
 
 - (void)sendRequestTo:(NSURL *)url usingVerb:(NSString *)verb withParameters:(NSDictionary *)parameters;
 - (void)uploadData:(NSData *)data toURL:(NSURL *)url;
